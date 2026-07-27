@@ -1,0 +1,100 @@
+.TH MU2EDAQ_COMMANDLINE_TOOLS 3 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ Python API"
+.SH NAME
+mu2edaq_commandline_tools \- Python API for the Mu2e DAQ command line tools
+.SH SYNOPSIS
+.nf
+.B from mu2edaq_commandline_tools import config, cli, __version__
+.PP
+.BI "config.load(" "explicit_path=None, overrides=None, environ=None" ") -> dict"
+.BI "config.find_config(" "explicit=None" ") -> pathlib.Path | None"
+.BI "config.config_search_paths(" "explicit=None" ") -> Iterable[Path]"
+.BI "config.load_file(" path ") -> dict"
+.BI "config.load_env(" "environ=None" ") -> dict"
+.BI "config.DEFAULTS" "  # dict of built-in defaults"
+.PP
+.BI "cli.main(" "argv=None" ") -> int"
+.BI "cli.COMMANDS" "  # dict of name -> Command(help, add_arguments, run)"
+.fi
+.SH DESCRIPTION
+.SS Configuration
+.B config.load()
+builds the effective configuration by applying, in increasing order of
+precedence: the built-in
+.BR DEFAULTS ,
+the YAML config file, the
+.BR MU2EDAQ_TOOLS_ *
+environment, and
+.IR overrides .
+.PP
+.I overrides
+carries the parsed command line. Entries whose value is
+.B None
+are ignored, so an argparse option the user did not give does not clobber a
+lower-precedence source. Keys not present in
+.B DEFAULTS
+are ignored from every source.
+.PP
+The returned dict holds one extra key,
+.BR _config_file ,
+naming the file that was read, or
+.B None
+when none was found. Keys beginning with an underscore are metadata, not
+settings.
+.PP
+.B load()
+raises
+.B ValueError
+when the YAML file's top level is not a mapping,
+.B OSError
+when it cannot be read, and
+.B RuntimeError
+when PyYAML is missing. A config file that simply does not exist is not an
+error.
+.PP
+.I environ
+defaults to
+.BR os.environ ;
+pass a dict to make tests hermetic.
+.SS Adding a tool
+Register a subcommand in
+.BR cli.COMMANDS .
+A
+.B Command
+is a named tuple of a help string, an optional hook that adds argparse
+options to the subparser, and a run hook called as
+.RI run( args ", " cfg )
+that returns a process exit status:
+.PP
+.nf
+.RS
+from mu2edaq_commandline_tools.cli import COMMANDS, Command
+
+def _add_ping(parser):
+    parser.add_argument("host")
+
+def cmd_ping(args, cfg):
+    print("pinging %s on %s" % (args.host, cfg["cluster"]))
+    return 0
+
+COMMANDS["ping"] = Command("check a node responds", _add_ping, cmd_ping)
+.RE
+.fi
+.PP
+The tool then appears in
+.BR "mu2edaq-tools list" ,
+gets the global options and config resolution for free, and needs no changes
+to the dispatcher.
+.SH EXAMPLE
+.nf
+.RS
+from mu2edaq_commandline_tools import config
+
+cfg = config.load(overrides={"cluster": args.cluster})
+print(cfg["cluster"], "from", cfg["_config_file"] or "defaults")
+.RE
+.fi
+.SH SEE ALSO
+.BR mu2edaq-tools (1),
+.BR mu2edaq_cli_core (3)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

@@ -1,0 +1,71 @@
+.TH MU2EDAQ-TOOLS-INFO 1 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ"
+.SH NAME
+mu2edaq-tools-info \- report the config file the C++ DAQ tools would use
+.SH SYNOPSIS
+.B mu2edaq-tools-info
+.RI [ options ]
+.SH DESCRIPTION
+.B mu2edaq-tools-info
+is the C++ counterpart to
+.BR "mu2edaq-tools config" .
+It prints the version of the
+.B mu2edaq_cli_core
+library it was linked against and the YAML config file a C++ tool started from
+the current working directory would read, without starting anything else.
+.PP
+It is a diagnostic: use it when a C++ and a Python tool disagree about their
+settings, to see which file each one actually picked up.
+.SH OPTIONS
+.TP
+.BR \-c ", " \-\-config " \fIFILE\fR"
+Report on
+.I FILE
+instead of searching the standard locations.
+.TP
+.BR \-p ", " \-\-paths
+List every candidate path in search order, marking the one in use with
+.BR * .
+.TP
+.BR \-V ", " \-\-version
+Print the version and exit.
+.TP
+.BR \-h ", " \-\-help
+Show help and exit.
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_CONFIG
+Config file to use when
+.B \-\-config
+is not given.
+.SH FILES
+The same search order as
+.BR mu2edaq-tools (1),
+minus the Python checkout entry:
+.PP
+.RS
+.nf
+$MU2EDAQ_TOOLS_CONFIG
+./mu2edaq-commandline-tools.yaml
+./config/mu2edaq-commandline-tools.yaml
+~/.config/mu2edaq/commandline-tools.yaml
+/etc/mu2edaq/commandline-tools.yaml
+.fi
+.RE
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 2
+Invalid command line.
+.SH EXAMPLES
+.RS
+.nf
+mu2edaq\-tools\-info \-\-paths
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq-tools (1),
+.BR mu2edaq_cli_core (3)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

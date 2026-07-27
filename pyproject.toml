@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mu2edaq-commandline-tools"
+description = "Command line utilities for operating and diagnosing the Mu2e DAQ suite."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Andrew Norman" },
+]
+keywords = ["cli", "daq", "mu2e", "operations", "diagnostics"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: System Administrators",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+dynamic = ["version"]
+dependencies = [
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+]
+
+[project.scripts]
+mu2edaq-tools = "mu2edaq_commandline_tools.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Mu2e/mu2edaq-commandline-tools"
+Repository = "https://github.com/Mu2e/mu2edaq-commandline-tools"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "mu2edaq_commandline_tools.__version__" }

@@ -1,0 +1,79 @@
+.TH MU2EDAQ-COMMANDLINE-TOOLS-BOOTSTRAP 1 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ"
+.SH NAME
+bootstrap.sh \- set up the mu2edaq-commandline-tools venv and CMake build
+.SH SYNOPSIS
+.B ./bootstrap.sh
+.RI [ options ]
+.SH DESCRIPTION
+Creates
+.I venv/
+if it does not exist, upgrades pip/setuptools/wheel, and installs
+mu2edaq-commandline-tools into it as an editable install so the checkout is
+what runs. Safe to re-run: it is also the "update my dependencies" command.
+.PP
+With
+.B \-\-cpp
+it additionally configures and builds the CMake targets
+.RB ( mu2edaq_cli_core
+and
+.BR mu2edaq-tools-info )
+under
+.IR build/ .
+.SH OPTIONS
+.TP
+.B \-\-dev
+Also install the
+.I dev
+extras (pytest), needed to run the test suite.
+.TP
+.B \-\-cpp
+Configure and build the C++ library and tools with CMake.
+.TP
+.B \-\-clean
+Remove
+.I venv/
+and
+.I build/
+first.
+.TP
+.BR \-\-python " \fIPATH\fR"
+Interpreter to build the venv with. Default:
+.BR $PYTHON ", " python3 .
+Python 3.9 or newer is required.
+.TP
+.B \-\-version
+Print the package version and exit.
+.TP
+.BR \-h ", " \-\-help
+Show help and exit.
+.SH ENVIRONMENT
+.TP
+.B PYTHON
+Default interpreter, overridden by
+.BR \-\-python .
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+No usable Python (or, with \-\-cpp, no CMake).
+.TP
+.B 2
+Invalid command line.
+.SH EXAMPLES
+Development setup with tests and the C++ build:
+.PP
+.RS
+.nf
+./bootstrap.sh \-\-dev \-\-cpp
+source venv/bin/activate
+pytest
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq-tools (1),
+.BR mu2edaq-commandline-tools-start (1),
+.BR mu2edaq-commandline-tools-stop (1)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

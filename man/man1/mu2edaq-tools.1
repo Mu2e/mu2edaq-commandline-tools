@@ -1,0 +1,125 @@
+.TH MU2EDAQ-TOOLS 1 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ"
+.SH NAME
+mu2edaq-tools \- command line utilities for the Mu2e DAQ suite
+.SH SYNOPSIS
+.B mu2edaq-tools
+.RI [ global-options ]
+.I command
+.RI [ command-options ]
+.SH DESCRIPTION
+.B mu2edaq-tools
+is the dispatcher for the Mu2e DAQ command line utilities. Each utility is a
+subcommand; run
+.B mu2edaq-tools list
+to see the ones this build provides.
+.PP
+Configuration is resolved from four sources. Highest precedence first:
+command line options, environment variables
+.RB ( MU2EDAQ_TOOLS_ *),
+the YAML config file, and the built-in defaults. None of them are required:
+with no config file and an empty environment the defaults are a usable
+configuration.
+.SH COMMANDS
+.TP
+.B list
+List the available tools with their one-line descriptions.
+.TP
+.B config " [--json]"
+Show the effective configuration and the config file it came from. With
+.B --json
+the output is a JSON object with
+.I config_file
+and
+.I values
+members, suitable for scripting.
+.TP
+.B version
+Print the package version.
+.SH GLOBAL OPTIONS
+.TP
+.BR \-c ", " \-\-config " \fIFILE\fR"
+Read configuration from
+.I FILE
+instead of searching the standard locations.
+.TP
+.BR \-\-cluster " \fINAME\fR"
+Cluster to operate on. Default:
+.BR mu2edaq .
+.TP
+.BR \-\-discovery\-timeout " \fISECONDS\fR"
+Seconds to wait for mu2edaq-discovery responses. Default:
+.BR 2.0 .
+.TP
+.BR \-\-log\-level " \fILEVEL\fR"
+One of DEBUG, INFO, WARNING, ERROR, CRITICAL. Default:
+.BR INFO .
+.TP
+.BR \-\-log\-dir " \fIDIR\fR"
+Directory for log files. Default:
+.BR logs .
+.TP
+.BR \-\-color ", " \-\-no\-color
+Force colored output on or off.
+.TP
+.BR \-V ", " \-\-version
+Print the version and exit.
+.TP
+.BR \-h ", " \-\-help
+Show help and exit.
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_CONFIG
+Config file to read when
+.B \-\-config
+is not given.
+.TP
+.BR MU2EDAQ_TOOLS_CLUSTER ", " MU2EDAQ_TOOLS_DISCOVERY_TIMEOUT ", " \
+MU2EDAQ_TOOLS_LOG_LEVEL ", " MU2EDAQ_TOOLS_LOG_DIR ", " MU2EDAQ_TOOLS_COLOR
+Override the corresponding config file key. Command line options win over
+these.
+.SH FILES
+Searched in order; the first one that exists is used:
+.PP
+.RS
+.nf
+$MU2EDAQ_TOOLS_CONFIG
+./mu2edaq-commandline-tools.yaml
+./config/mu2edaq-commandline-tools.yaml
+<checkout>/config/mu2edaq-commandline-tools.yaml
+~/.config/mu2edaq/commandline-tools.yaml
+/etc/mu2edaq/commandline-tools.yaml
+.fi
+.RE
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+The configuration could not be read.
+.TP
+.B 2
+No command was given, or the command line was invalid.
+.SH EXAMPLES
+Show what the tools would use, from the current directory:
+.PP
+.RS
+.nf
+mu2edaq\-tools config
+.fi
+.RE
+.PP
+Point at a different cluster for one invocation:
+.PP
+.RS
+.nf
+mu2edaq\-tools \-\-cluster mu2edaq\-test config \-\-json
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq-tools-info (1),
+.BR mu2edaq-commandline-tools-bootstrap (1),
+.BR mu2edaq_cli_core (3),
+.BR mu2edaq_commandline_tools (3)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

@@ -1,0 +1,25 @@
+# Configuration for mu2edaq-commandline-tools.
+#
+# Every key here can be overridden by an environment variable named
+# MU2EDAQ_TOOLS_<KEY> (upper case), and by the matching command line option,
+# which wins over both:
+#
+#   defaults < config file < environment < command line
+#
+# Point the tools at a different file with --config FILE or
+# MU2EDAQ_TOOLS_CONFIG=/path/to/file.yaml
+
+# Cluster the tools act on by default.
+cluster: mu2edaq
+
+# Seconds to wait for mu2edaq-discovery responses before giving up.
+discovery_timeout: 2.0
+
+# Logging verbosity: DEBUG, INFO, WARNING, ERROR or CRITICAL.
+log_level: INFO
+
+# Directory for log files, relative to the working directory unless absolute.
+log_dir: logs
+
+# Colored terminal output.
+color: true

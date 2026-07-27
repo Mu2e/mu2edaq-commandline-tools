@@ -1,0 +1,97 @@
+.TH MU2EDAQ_CLI_CORE 3 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ C++ API"
+.SH NAME
+mu2edaq_cli_core \- C++ configuration helpers for the Mu2e DAQ command line tools
+.SH SYNOPSIS
+.nf
+.B #include <mu2edaq_cli_core.hpp>
+.PP
+.B namespace mu2edaq { namespace cli {
+.PP
+.BI "const char* version();"
+.BI "const char* env_prefix();"
+.BI "std::vector<std::string> config_search_paths(const std::string& " explicit_path " = \"\");"
+.BI "std::string find_config(const std::string& " explicit_path " = \"\");"
+.BI "std::string env_override(const std::string& " key ", const std::string& " fallback " = \"\");"
+.PP
+.B }}
+.fi
+.PP
+Link with
+.BR -lmu2edaq_cli_core ,
+or, with this checkout added to your build:
+.PP
+.RS
+.nf
+add_subdirectory(mu2edaq-commandline-tools)
+target_link_libraries(mytool PRIVATE mu2edaq::cli_core)
+.fi
+.RE
+.SH DESCRIPTION
+This library gives C++ tools the same configuration lookup the Python package
+uses, so a C++ tool and a Python tool started from the same directory read the
+same YAML file. It does not parse YAML; it locates the file and reads the
+environment. Pick your own parser for the contents.
+.TP
+.B version()
+Package version string, e.g.
+.BR 0.1.0 .
+Compiled in from the Python package's
+.I __version__
+at configure time, so the two cannot drift.
+.TP
+.B env_prefix()
+The environment variable prefix,
+.BR MU2EDAQ_TOOLS_ .
+.TP
+.B config_search_paths()
+Candidate config file locations, most specific first. When
+.I explicit_path
+is non-empty it is the only candidate returned. Otherwise the order is
+.BR $MU2EDAQ_TOOLS_CONFIG ", "
+.IR ./mu2edaq-commandline-tools.yaml ", "
+.IR ./config/mu2edaq-commandline-tools.yaml ", "
+.IR ~/.config/mu2edaq/commandline-tools.yaml ", "
+.IR /etc/mu2edaq/commandline-tools.yaml .
+Paths are returned whether or not they exist.
+.TP
+.B find_config()
+The first candidate that is an existing regular file, or an empty string if
+none is. An empty return is not an error: the defaults are usable on their own.
+.TP
+.B env_override()
+The value of
+.BI MU2EDAQ_TOOLS_ KEY
+with
+.I key
+upper-cased and dashes turned into underscores, or
+.I fallback
+when the variable is unset or empty.
+.SH RETURN VALUE
+No function throws or returns an error code. Filesystem errors during the
+search are treated as "not found".
+.SH THREAD SAFETY
+All functions are reentrant but read the process environment and current
+working directory, so results change if another thread calls
+.BR setenv (3)
+or
+.BR chdir (2)
+concurrently.
+.SH EXAMPLE
+.nf
+#include <mu2edaq_cli_core.hpp>
+#include <iostream>
+
+int main() {
+  const std::string cfg = mu2edaq::cli::find_config();
+  if (cfg.empty()) std::cout << "using built-in defaults\\n";
+  else             std::cout << "config: " << cfg << "\\n";
+  const std::string cluster = mu2edaq::cli::env_override("cluster", "mu2edaq");
+  std::cout << "cluster: " << cluster << "\\n";
+}
+.fi
+.SH SEE ALSO
+.BR mu2edaq-tools-info (1),
+.BR mu2edaq-tools (1),
+.BR mu2edaq_commandline_tools (3)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.
