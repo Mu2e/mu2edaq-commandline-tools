@@ -1,0 +1,3587 @@
+[
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 129,
+  "active": true,
+  "generator": false,
+  "name": "CFO DTC Soft Reset",
+  "handler": "CFOandDTCCoreVInterface::SoftReset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Executes a soft reset of the CFODTC by setting the reset bit (31) to true on the <b>CFO DTC Control Register</b> (0x9100). This bit clear counters and FIFOs; it does not change select/control bits, it does not reset the primary CFODTC Timing Interface block."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 145,
+  "active": true,
+  "generator": false,
+  "name": "CFO DTC Hard Reset",
+  "handler": "CFOandDTCCoreVInterface::HardReset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Executes a soft reset of the CFODTC by setting the reset bit (0) to true on the <b>CFO DTC Control Register</b> (0x9100). This bit is like a \u2018factory reset\u2019 - it DOES change select/control/threshold bits back to defaults; it DOES reset the primary FPGA Timing Interface block. It also executes a soft reset of the CFODTC after the hard reset."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 162,
+  "active": true,
+  "generator": false,
+  "name": "Get Firmware Version",
+  "handler": "CFOandDTCCoreVInterface::GetFirmwareVersion",
+  "inputs": [],
+  "outputs": [
+   "Firmware Version Date"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 173,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 184,
+  "active": true,
+  "generator": false,
+  "name": "Flash LEDs",
+  "handler": "CFOandDTCCoreVInterface::FlashLEDs",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Flashes the LEDs, for example to help find the target FPGA in a multi-FPGA deployment."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 194,
+  "active": true,
+  "generator": false,
+  "name": "Get Status",
+  "handler": "CFOandDTCCoreVInterface::GetStatus",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reads and displays all registers in a human-readable format."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 204,
+  "active": true,
+  "generator": false,
+  "name": "Get Simple Status",
+  "handler": "CFOandDTCCoreVInterface::GetSimpleStatus",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Similar to <b>Get Status</b>, this FE Macro fetches data from a select few registers. Registers <b>DTC Control, ROC Emulation Enable, Link Enable, SERDES Reset, and SERDES Reset Done</b> are displayed in a human-readable format."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 217,
+  "active": true,
+  "generator": false,
+  "name": "Check Firefly Temperature",
+  "handler": "CFOandDTCCoreVInterface::GetFireflyTemperature",
+  "inputs": [],
+  "outputs": [
+   "Temperature"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Check the temperature from the Firefly RX IIC Bus."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 227,
+  "active": true,
+  "generator": false,
+  "name": "Check Firefly Loss-of-Light",
+  "handler": "CFOandDTCCoreVInterface::GetLinkLossOfLight",
+  "inputs": [],
+  "outputs": [
+   "Link Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Checking the Loss-of-Light reads from the I2C bus register on the Firefly for any light source."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 238,
+  "active": true,
+  "generator": false,
+  "name": "Check FPGA Temperature",
+  "handler": "CFOandDTCCoreVInterface::GetFPGATemperature",
+  "inputs": [],
+  "outputs": [
+   "Temperature"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Get the temperature of the FPGA in degrees Celsius. A -273.0 reading is equivalent to 0x0 from the ADC on-die sensor."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 249,
+  "active": true,
+  "generator": false,
+  "name": "Jitter Attenuator Setup",
+  "handler": "CFOandDTCCoreVInterface::SelectJitterAttenuatorSource",
+  "inputs": [
+   "Source Clock (0 is from CFO, 1 is from RJ45)",
+   "DoNotSet",
+   "AlsoResetJA"
+  ],
+  "outputs": [
+   "Register Write Results"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Select the source of the jitter attenuator: a local oscilator on the DTC or the RTF. The RTF (RJ45 Timing Fanout) is a separate board to alleviate jitter accumulation. <b>Not all DTCs are connected to the RTF</b>."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 263,
+  "active": true,
+  "generator": false,
+  "name": "Get Device Index",
+  "handler": "CFOandDTCCoreVInterface::GetDeviceIndex",
+  "inputs": [],
+  "outputs": [
+   "Device Index"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Returns the PCIe device index for this CFO/DTC instance."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 273,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 281,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 290,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 300,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/CFOandDTCCore/CFOandDTCCoreVInterface.cc",
+  "line": 308,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 38,
+  "active": false,
+  "generator": false,
+  "name": "varTest2",
+  "handler": "CAPTANSignalGenerator::varTest2",
+  "inputs": [
+   "myOtherArg"
+  ],
+  "outputs": [
+   "myArg",
+   "outArg1"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 48,
+  "active": false,
+  "generator": false,
+  "name": "varTest",
+  "handler": "CAPTANSignalGenerator::varTest",
+  "inputs": [
+   "myOtherArg"
+  ],
+  "outputs": [
+   "myArg",
+   "outArg1"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 56,
+  "active": true,
+  "generator": false,
+  "name": "Reset",
+  "handler": "CAPTANSignalGenerator::Reset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 64,
+  "active": true,
+  "generator": false,
+  "name": "Get Firmware Version",
+  "handler": "CAPTANSignalGenerator::getFirmwareVersion",
+  "inputs": [],
+  "outputs": [
+   "Firmware Version Date"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Get RTF firmware version."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 74,
+  "active": true,
+  "generator": false,
+  "name": "Get Pulse Period",
+  "handler": "CAPTANSignalGenerator::getPulsePeriod",
+  "inputs": [],
+  "outputs": [
+   "Pulse Period (us)",
+   "Low Pulse Width (Clock Cycle := 10 ns)"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Returns the clock period of the pulse trigger in microseconds. The 'Low Pulse Width' is the number of clock cycles the trigger stays low. The amount of time the pulse is high is hard coded in firmware (10 clock cycles)."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 88,
+  "active": true,
+  "generator": false,
+  "name": "Get Manual Mode",
+  "handler": "CAPTANSignalGenerator::getManualMode",
+  "inputs": [],
+  "outputs": [
+   "Manual Mode"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reads the mode of the pulse generator. When mode = 1, the RTF pauses all pulses. When mode = 0, the RTF runs continuous pulses."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 100,
+  "active": true,
+  "generator": false,
+  "name": "Set Manual Mode",
+  "handler": "CAPTANSignalGenerator::setManualMode",
+  "inputs": [
+   "Manual Mode"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Sets the mode of the pulse generator. When mode = 1, the RTF pauses all pulses. When mode = 0, the RTF runs continuous pulses."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 112,
+  "active": true,
+  "generator": false,
+  "name": "Set Burst Mode",
+  "handler": "CAPTANSignalGenerator::setupBurstMode",
+  "inputs": [
+   "Burst Count"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Creates a burst of pulses. The RTF stops all pulses after the last count. Set manual mode to 0 to run continous pulses."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CAPTANSignalGenerator_interface.cc",
+  "line": 124,
+  "active": true,
+  "generator": false,
+  "name": "Set Pulse Period",
+  "handler": "CAPTANSignalGenerator::setPulsePeriod",
+  "inputs": [
+   "Trigger Period (s, ms, us, ns, and clocks allowed) [clocks := 10ns]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Sets the pulse generator\u2019s trigger period."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 111,
+  "active": true,
+  "generator": false,
+  "name": "CFO Reset",
+  "handler": "CFOFrontEndInterface::CFOReset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Executes a soft reset of the CFO by setting the reset bit (31) to true on the <b>CFO Control Register</b> (0x9100)."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 122,
+  "active": true,
+  "generator": false,
+  "name": "Clock Marker Enable/Disable",
+  "handler": "CFOFrontEndInterface::EnableOrDisableClockMarkers",
+  "inputs": [
+   "Enable Clock Markers (Default := false)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Enable or Disable the Mu2e Clock Marker broadcast over the CFO timing links."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 133,
+  "active": true,
+  "generator": false,
+  "name": "CFO Halt",
+  "handler": "CFOFrontEndInterface::CFOHalt",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Transitions the state machine to <b>Halt</b> by setting the Enable Beam Off Mode Register to off."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 144,
+  "active": true,
+  "generator": false,
+  "name": "CFO Write",
+  "handler": "CFOFrontEndInterface::WriteCFO",
+  "inputs": [
+   "address",
+   "writeData"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro writes to the CFO registers."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 155,
+  "active": true,
+  "generator": false,
+  "name": "Loopback Test",
+  "handler": "CFOFrontEndInterface::LoopbackTest",
+  "inputs": [
+   "Number of Loopback tests (Default := 1)",
+   "Target Link (-1 for all, Default := -1)",
+   "Target ROC (-1 for all, Default := -1)",
+   "Write ROOT file (Default := false)",
+   "ROOT file name (Default := CFO_loopback.root)"
+  ],
+  "outputs": [
+   "Response"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Similar to <b>Test Loopback marker</b>, this FE Macro repeatedly measures the delay of markers from ROCs for a specified link. The average delay is returned given the number of iterations (loopbacks), link, and delay (sleep between iterations). This FE Macro is useful for Event Window synchronization.  Constraints: \\t-Loopback must be less than 10,000."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 175,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 187,
+  "active": true,
+  "generator": false,
+  "name": "CFO Read",
+  "handler": "CFOFrontEndInterface::ReadCFO",
+  "inputs": [
+   "address"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read from the CFO Memory Map.  Parameters: \\taddress (uint16_t): Address in Memory Map."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 200,
+  "active": true,
+  "generator": false,
+  "name": "Reset Runplan",
+  "handler": "CFOFrontEndInterface::ResetRunplan",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Resets the Event Building run plan by setting the reset bit (27) to true on the <b>CFO Control Register</b>."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 211,
+  "active": true,
+  "generator": false,
+  "name": "Compile Runplan",
+  "handler": "CFOFrontEndInterface::CompileRunplan",
+  "inputs": [
+   "Input Text File",
+   "Output Binary File"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro compiles the CFO run plan to a binary file. You must compile before running <b>Set Runplan</b> which downloads the binary run plan to the CFO.  Default text run plan: srcs/mu2e-pcie-utils/cfoInterfaceLib/Command.txt Default binary run plan: srcs/mu2e-pcie-utils/cfoInterfaceLib/Command.bin"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 223,
+  "active": true,
+  "generator": false,
+  "name": "Set Runplan",
+  "handler": "CFOFrontEndInterface::SetRunplan",
+  "inputs": [
+   "Binary Run File"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Download the binary run plan to the CFO. <b>You must first compile your run plan</b>.    Paramters: \\tBinary Run File (string): Path to the binary run plan. Default: srcs/mu2e-pcie-utils/cfoInterfaceLib/Commands.bin"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 236,
+  "active": true,
+  "generator": false,
+  "name": "Compile, Set, and Launch On/Off Spill Template Run Plan",
+  "handler": "CFOFrontEndInterface::CompileSetAndLaunchTemplateSuperCycleRunPlan",
+  "inputs": [
+   "Enable CFO Run Plan Execution (Default := false)",
+   "Number of 1.4s super cycle repetitions (0 := infinite)",
+   "Starting Event Window Tag (Default or -1 := start from 0 and continue)",
+   "Enable Clock Markers (Default := false)",
+   "Use Detached Buffer Test (Default := false)",
+   "For Detached Buffer Test, Save Binary Data to File (Default: false)",
+   "For Detached Buffer Test, Save Subevent Header to Binary File (Default: false)",
+   "For Detached Buffer Test, Do NOT Reset Counters (Default: false)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Compile & Set a Template CFO Run Plan. Disabling turns off output of CFO Event Window Markers, timing markers, and Heartbeat Packets. Enabling turns on emulated Event Window generation and timing markers based on the CFO parameters."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 255,
+  "active": true,
+  "generator": false,
+  "name": "Compile, Set, and Launch Fixed-width Event Window Template Run Plan",
+  "handler": "CFOFrontEndInterface::CompileSetAndLaunchTemplateFixedWidthRunPlan",
+  "inputs": [
+   "Enable CFO Run Plan Execution (Default := false)",
+   "Fixed-width Event Window Duration (s, ms, us, ns, and clocks allowed) [clocks := 25ns]",
+   "Number of Event Window Markers to generate (0 := infinite)",
+   "Starting Event Window Tag (Default or -1 := start from 0 and continue)",
+   "Event Window Mode (Default := 1)",
+   "Enable Clock Markers (Default := false)",
+   "Use Detached Buffer Test (Default := false)",
+   "For Detached Buffer Test, Save Binary Data to File (Default: false)",
+   "For Detached Buffer Test, Save Subevent Header to Binary File (Default: false)",
+   "For Detached Buffer Test, Do NOT Reset Counters (Default: false)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Compile & Set a Template CFO Run Plan. Disabling turns off output of CFO Event Window Markers, timing markers, and Heartbeat Packets. Enabling turns on emulated Event Window generation and timing markers based on the CFO parameters."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 277,
+  "active": true,
+  "generator": false,
+  "name": "Launch Runplan",
+  "handler": "CFOFrontEndInterface::LaunchRunplan",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Launches the Event Building run plan. You must <b>Compile Runplan</b> and <b>Set Runplan</b> before launching. You do not need to compile and set the same runplan more than once. Use <b>Reset Runplan</b> and <b>Launch Runplan</b> thereafter."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 289,
+  "active": true,
+  "generator": false,
+  "name": "Get CFO Counters",
+  "handler": "CFOFrontEndInterface::GetCFOCounters",
+  "inputs": [],
+  "outputs": [
+   "Counters"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reads and displays important CFO counters."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 302,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Get Status",
+  "handler": "CFOFrontEndInterface::SharedRunPlanStatus",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro returns the status of the CFO Run Plan. It retrieves the current Event Mode, Event Window Tag, Active Subsystems, and running status."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 313,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Start",
+  "handler": "CFOFrontEndInterface::SharedRunPlanStart",
+  "inputs": [
+   "Initial Event Mode (Default = 0)",
+   "Initial Event Tag  (Default = 0)",
+   "Run Plan Event Window Duration (s, ms, us, ns, and clocks allowed) [clocks := 25ns] (Default = 1.8 us)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro starts the shared CFO Run Plan, with a specified Event Mode, initial Event Window Tag, and Fixed-width Window Duration or Super-cycle Emulation Event Window Duration.<br><br>Note on Event Window Duration: Remember this is a <b>Shared</b> Run Plan, so choose an Event Window Duration that works for all currentyl active subsystems. For example, if you are testing with the CRV and you want to emulate super cycles while the CRV takes 100us windows at 50% Duty Cycle, then choose 1.8us because this is the common denominator (i.e. both run type needs can be assembled from 1.8 us Event Window building blocks).<br><br>Example continued: The next step after starting with the common building block of 1.8 us windows, would be for you to select <b>Shared Run Plan Join</b> and specify your Subsystem and that you want Supercycle Emulation, while the CRV team selects <b>Shared Run Plan Join</b> and specifies their Subsystem and that they want 100 us windows at 50% duty cycle."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 339,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Stop",
+  "handler": "CFOFrontEndInterface::SharedRunPlanStop",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro stops the Shared CFO Run Plan. Note this stops the Shared Run Plan for everyone! Be sure you do not want to do this! If you only want to stop for your subsystem (and not for everyone), then choose <b>Shared Run Plan Leave</b>, not <b>Stop</b>"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 352,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Join",
+  "handler": "CFOFrontEndInterface::SharedRunPlanSubsystemJoin",
+  "inputs": [
+   "Subsystem Name (CRV, Calo, Tracker, STM, ExtMon, Default = Custom)",
+   "Custom Mode Bit Position (0-47, Default = 0)",
+   "Custom Mode Bit Count (1-48, Default = 48)",
+   "Custom Mode Bit Value (Default = 0)",
+   "Duty Cycle (% or M:N on:event ratio, Default = 100%)",
+   "Event Offset in Loop (Default = 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro joins the Shared CFO Run Plan with the specified subsystem and duty cycle.<br><br>Regarding <b>Duty Cycle</b>% specifies the duty cycle percentage of active Event Windows. M:N ratio specifies M Event Windows active every N Event Windows. For example, 40% duty cycle or 2:5 ratio with 100 us windows would be two consecutive 100 us windows active every 500 us (i.e. 2 in 5 windows active). <br><br>Here are the corresponding <b>Subsystem Mode Bits</b> from docdb 4914:<br><TAB><br>Tracker := bit <br>Calo := bit <br>CRV := bit <br>STM := bit <br>ExtMon (TEM) := bit <br>HWDev := bit </TAB><br>Mode Packet Definition:<TAB><br>Event Mode Byte 1 (Resrv\u2019d Trk)\tEvent Mode Byte 0 [7:3] \tPattern Mode [2:1]\tInjection Data Source [0]<br>Event Mode Byte 3 (Resrv\u2019d CRV)\tEvent Mode Byte 2 (Resrv\u2019d Calo) [7:1]\tCalo Laser Injection [0]<br>Delivery Ring RF-0 Marker TDC [15:8]\tResrv\u2019d (TEM) [7:6] (STM) [5:4] \tSubrun Handling [3:1]\tOn-spill Flag [0]</TAB>/Shared Run Plan Single-shot JoinSubsystem Name (CRV, Calo, Tracker, STM, ExtMon, Default = Custom)Duty Cycle (% or M:N on:event ratio, Default = 100%)Custom Mode Bit Position (0-47, Default = 0)Custom Mode Bit Count (1-48, Default = 48)Custom Mode Bit Value (Default = 0)Single-shot Event Count (Any count allowed, executed in chunks of 1-/)Result*This FE Macro joins the Shared CFO Run Plan for a single-shot (one-time) quantity of events using the OR_SINGLESHOT opcode (opcode 111). Unlike the regular <b>Shared Run Plan Join</b>, OR_SINGLESHOT fires only once in hardware, so the specified subsystem bit(s) are set for exactly the requested count of events and then permanently cleared by the corresponding AND mask.<br><br><b>Duty Cycle</b> supports the same syntax as <b>Shared Run Plan Join</b>: either a percentage or M:N ratio. For single-shot, however, the resolved N in any M:N ratio is limited to N &le; , so very coarse ratios (e.g., 1:200) are not allowed. This determines how many events are set per fine-loop pass before software batches additional passes.<br><br><b>Single-shot Event Count</b> can be any count but will be built out of batches of /.<br><br>For example, if 143 events are requested you will get a batch of 100 and 43 (each batch managed by software).<br><br>Here are the corresponding <b>Subsystem Mode Bits</b> from docdb 4914:<br><TAB><br>Tracker := bit <br>Calo := bit <br>CRV := bit <br>STM := bit <br>ExtMon (TEM) := bit <br>HWDev := bit </TAB>Shared Run Plan LeaveSubsystem Name (CRV, Calo, Tracker, STM, ExtMon, Custom)Custom Mode Bit Position (Default = 0)Custom Mode Bit Count (Default = 48)Result*This FE Macro removes the specified subsystem from the Shared CFO Run Plan.Configure for Timing Chain"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 399,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Single-shot Join",
+  "handler": "CFOFrontEndInterface::SharedRunPlanSubsystemSingleShotJoin",
+  "inputs": [
+   "Subsystem Name (CRV, Calo, Tracker, STM, ExtMon, Default = Custom)",
+   "Duty Cycle (% or M:N on:event ratio, Default = 100%)",
+   "Custom Mode Bit Position (0-47, Default = 0)",
+   "Custom Mode Bit Count (1-48, Default = 48)",
+   "Custom Mode Bit Value (Default = 0)",
+   "Single-shot Event Count (Any count allowed, executed in chunks of 1-/)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro joins the Shared CFO Run Plan for a single-shot (one-time) quantity of events using the OR_SINGLESHOT opcode (opcode 111). Unlike the regular <b>Shared Run Plan Join</b>, OR_SINGLESHOT fires only once in hardware, so the specified subsystem bit(s) are set for exactly the requested count of events and then permanently cleared by the corresponding AND mask.<br><br><b>Duty Cycle</b> supports the same syntax as <b>Shared Run Plan Join</b>: either a percentage or M:N ratio. For single-shot, however, the resolved N in any M:N ratio is limited to N &le; , so very coarse ratios (e.g., 1:200) are not allowed. This determines how many events are set per fine-loop pass before software batches additional passes.<br><br><b>Single-shot Event Count</b> can be any count but will be built out of batches of /.<br><br>For example, if 143 events are requested you will get a batch of 100 and 43 (each batch managed by software).<br><br>Here are the corresponding <b>Subsystem Mode Bits</b> from docdb 4914:<br><TAB><br>Tracker := bit <br>Calo := bit <br>CRV := bit <br>STM := bit <br>ExtMon (TEM) := bit <br>HWDev := bit </TAB>"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 444,
+  "active": true,
+  "generator": false,
+  "name": "Shared Run Plan Leave",
+  "handler": "CFOFrontEndInterface::SharedRunPlanSubsystemLeave",
+  "inputs": [
+   "Subsystem Name (CRV, Calo, Tracker, STM, ExtMon, Custom)",
+   "Custom Mode Bit Position (Default = 0)",
+   "Custom Mode Bit Count (Default = 48)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro removes the specified subsystem from the Shared CFO Run Plan."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 461,
+  "active": true,
+  "generator": false,
+  "name": "Configure for Timing Chain",
+  "handler": "CFOFrontEndInterface::ConfigureForTimingChain",
+  "inputs": [
+   "StepIndex"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro configures the CFO for DTC chain synchronization."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 472,
+  "active": true,
+  "generator": false,
+  "name": "Super Orchestration Start",
+  "handler": "CFOFrontEndInterface::SuperOrchestrationStart",
+  "inputs": [
+   "Number of Event Window Markers (Default: 10)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Start Super Orchestration while in a run."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 483,
+  "active": true,
+  "generator": false,
+  "name": "Super Orchestration End",
+  "handler": "CFOFrontEndInterface::SuperOrchestrationEnd",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "End Super Orchestration while in a run."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 494,
+  "active": true,
+  "generator": false,
+  "name": "Super Orchestration",
+  "handler": "CFOFrontEndInterface::SuperOrchestration",
+  "inputs": [
+   "Do CRV ROC Reset",
+   "Do Calo ROC Reset",
+   "Do Calo ROC Writes"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "To assist with throttling Event Window Marker rates during Global Run 4."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 508,
+  "active": true,
+  "generator": false,
+  "name": "Buffer Test Detached",
+  "handler": "CFOFrontEndInterface::BufferTest_detached",
+  "inputs": [
+   "Command to 0/Status (to read counters, etc.), 1/Start, or 2/Halt (Default: Status)",
+   "Starting Event Window Tag (Default: 0)",
+   "Save Binary Data to File (Default: false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read a specified number of events from the Data DMA channel-0, and attempt to validate data."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 538,
+  "active": true,
+  "generator": false,
+  "name": "Runplan Subrun Config Setup",
+  "handler": "CFOFrontEndInterface::RunplanSubrunConfigSetup",
+  "inputs": [
+   "Subrun Event Limit (Default: 0)",
+   "Subrun Prediction Offset (Default: 0)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Set the Run Plan Subrun configuration registers. The Subrun Event Limit sets the maximum number of events per subrun. The Subrun Prediction Offset sets the prediction offset for subrun transitions."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/CFOFrontEndInterfaceImpl.cc",
+  "line": 554,
+  "active": true,
+  "generator": false,
+  "name": "Runplan Subrun Config Read",
+  "handler": "CFOFrontEndInterface::RunplanSubrunConfigRead",
+  "inputs": [],
+  "outputs": [
+   "Subrun Event Limit",
+   "Subrun Prediction Offset"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read the Run Plan Subrun configuration registers. Returns the Subrun Event Limit and Subrun Prediction Offset values."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 144,
+  "active": true,
+  "generator": false,
+  "name": "ROC Setup",
+  "handler": "DTCFrontEndInterface::SetupROCs",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "Set Link RX/TX Enable (Default := false)",
+   "Set Link Timing Enable (Default := false)",
+   "Set ROC Emulation Enable (Default := false)",
+   "ROC Emulation Type (Default = 0: Internal, 1: Fiber-Loopback, 2: External)",
+   "ROC generated Data Payload fragment packet count (11-bits, Default := 16)",
+   "Block Null Heartbeats to ALL ROCs (Default := false)",
+   "Resequence Non-null Events for ALL ROCs (Default := false)",
+   "Set Auto-Gen DRP per ROC (Default := false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Use this to control the parameters of the ROC Emulation of the DTC. Internal ROC emulation does not require any fibers; the ROC is emulated without using the link SERDES rx/tx. Fiber-Loopback ROC emulation requires a single fiber connected between the link SERDES rx <==> tx channels. External ROC emulation uses the link SERDES rx/tx as though it is a ROC; this means the rx/tx channels could be connected to another DTC, and the other DTC would communicate to this emulated ROC following the ROC protocol of docdb-4914.  Note: Internal and External ROC emulation can co-exist on the same DTC link. While Fiber-Loopback ROC emulation is exclusive to the other two types and will take precedence.  Auto-Gen DRP per ROC: When enabled, the DTC generates Data Request Packets automatically per-ROC (bits [21:16] of register 0x9114). The global Autogenerate DRP bit (register 0x9100 bit 23) is automatically cleared when per-ROC mode is enabled, as the global override must be off for per-ROC control to take effect."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 182,
+  "active": true,
+  "generator": false,
+  "name": "ROC Write",
+  "handler": "DTCFrontEndInterface::WriteROC",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "address",
+   "writeData"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro writes data to a specific register on a specified link."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 195,
+  "active": true,
+  "generator": false,
+  "name": "ROC Read",
+  "handler": "DTCFrontEndInterface::ReadROC",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "address"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro reads data from a ROC given a link and address."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 207,
+  "active": true,
+  "generator": false,
+  "name": "ROC Firmware Inventory",
+  "handler": "DTCFrontEndInterface::ROCFirmwareInventory",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)"
+  ],
+  "outputs": [
+   "Status",
+   "InventoryJSON"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro reads firmware and board identity registers from selected ROCs and returns a per-DTC inventory table. InventoryJSON contains a JSON array of per-ROC objects for programmatic consumption."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 220,
+  "active": true,
+  "generator": false,
+  "name": "List Firmware Directory",
+  "handler": "DTCFrontEndInterface::ListFirmwareDirectory",
+  "inputs": [
+   "DirectoryPath"
+  ],
+  "outputs": [
+   "DirectoryJSON"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Lists subdirectories and files in a firmware directory path. Returns JSON array of entries."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 231,
+  "active": true,
+  "generator": false,
+  "name": "ROC Block Read",
+  "handler": "DTCFrontEndInterface::BlockReadROC",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "address",
+   "Number Of 16-bit words to Read (Default := 8)",
+   "incrementAddress (Default := false)"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro is used to read multiple words from a ROC."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 245,
+  "active": true,
+  "generator": false,
+  "name": "ROC Block Write",
+  "handler": "DTCFrontEndInterface::BlockWriteROC",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "address",
+   "writeData (CSV-literal or CSV-filename of 16-bit words, or keyword + parameter 'AUTOGENERATE count')",
+   "incrementAddress (Default = false)",
+   "requestAck (Default = false)"
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro enables users to write multiple words in the format of a comma separated values or a CSV file."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 263,
+  "active": true,
+  "generator": false,
+  "name": "Headers Format test",
+  "handler": "DTCFrontEndInterface::HeaderFormatTest",
+  "inputs": [],
+  "outputs": [
+   "setRegister"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Use this FE Macro to test the header format using emulated CFO Heartbeat packets."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 275,
+  "active": true,
+  "generator": false,
+  "name": "ROC_Write_ExtRegister",
+  "handler": "DTCFrontEndInterface::WriteExternalROCRegister",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "block",
+   "address",
+   "writeData"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 287,
+  "active": true,
+  "generator": false,
+  "name": "ROC_Read_ExtRegister",
+  "handler": "DTCFrontEndInterface::ReadExternalROCRegister",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "block",
+   "address"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 302,
+  "active": true,
+  "generator": false,
+  "name": "Buffer Test",
+  "handler": "DTCFrontEndInterface::BufferTest",
+  "inputs": [
+   "Data are SubEvents (Default: true)",
+   "Number of [Sub]Events (Default: 1)",
+   "Starting Event Window Tag (Default: 0)",
+   "Match Event Tags (Default: false)",
+   "Display Payload at GUI (Default: true)",
+   "Save Binary Data to File (Default: false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read a specified number of events from the Data DMA channel-0, and attempt to validate data."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 327,
+  "active": true,
+  "generator": false,
+  "name": "Pattern Test",
+  "handler": "DTCFrontEndInterface::PatternTest",
+  "inputs": [
+   "Data are SubEvents (Default: true)",
+   "Number of [Sub]Events (Default: 1)",
+   "Starting Event Window Tag (Default: 0)",
+   "Match Event Tags (Default: false)",
+   "Display Payload at GUI (Default: true)",
+   "Save Binary Data to File (Default: false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read a specified number of events from the Data DMA channel-0, and attempt to validate data."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 352,
+  "active": true,
+  "generator": false,
+  "name": "DTC_HighRate_DCS_Check",
+  "handler": "DTCFrontEndInterface::DTCHighRateDCSCheck",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "loops",
+   "baseAddress",
+   "correctRegisterValue0",
+   "correctRegisterValue1"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 365,
+  "active": true,
+  "generator": false,
+  "name": "DTC_HighRate_DCS_Block_Check",
+  "handler": "DTCFrontEndInterface::DTCHighRateBlockCheck",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "loops",
+   "baseAddress",
+   "correctRegisterValue0",
+   "correctRegisterValue1"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 378,
+  "active": true,
+  "generator": false,
+  "name": "DTC_SendHeartbeatAndDataRequest",
+  "handler": "DTCFrontEndInterface::DTCSendHeartbeatAndDataRequest",
+  "inputs": [
+   "numberOfRequests",
+   "timestampStart",
+   "useSWCFOEmulator",
+   "rocMask"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 387,
+  "active": true,
+  "generator": false,
+  "name": "DTC Instantiate",
+  "handler": "DTCFrontEndInterface::DTCInstantiate",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro reinstantiates the DTC interface class."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 398,
+  "active": true,
+  "generator": false,
+  "name": "Buffer Test Detached",
+  "handler": "DTCFrontEndInterface::BufferTest_detached",
+  "inputs": [
+   "Command to 0/Status (to read counters, etc.), 1/Start, or 2/Halt (Default: Status)",
+   "Data are SubEvents (Default: true)",
+   "Starting Event Window Tag (Default: 0)",
+   "Match Event Tags (Default: false)",
+   "Save Binary Data to File (Default: false)",
+   "Save Binary Data Filename",
+   "Save Subevent Header to Binary File (Default: false)",
+   "Payload Packet Threshold for Saving Event (Default: 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read a specified number of events from the Data DMA channel-0, and attempt to validate data."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 428,
+  "active": true,
+  "generator": false,
+  "name": "DTC Write",
+  "handler": "DTCFrontEndInterface::WriteDTC",
+  "inputs": [
+   "address",
+   "writeData",
+   "Do validation (Default := true)"
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro writes to the DTC registers."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 439,
+  "active": true,
+  "generator": false,
+  "name": "DTC Read",
+  "handler": "DTCFrontEndInterface::ReadDTC",
+  "inputs": [
+   "address"
+  ],
+  "outputs": [
+   "readData"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read from the DTC Memory Map."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 448,
+  "active": true,
+  "generator": false,
+  "name": "Event Mode Required Mask Set",
+  "handler": "DTCFrontEndInterface::SetCFOEventModeRequiredMask",
+  "inputs": [
+   "Event Mode Required Mask (Default := 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Set the Event Mode Required Mask used for Event Mode filtering. A mask bit of 1 requires the corresponding Event Mode bit to also be 1."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 459,
+  "active": true,
+  "generator": false,
+  "name": "Event Mode Required Mask Read",
+  "handler": "DTCFrontEndInterface::ReadCFOEventModeRequiredMask",
+  "inputs": [],
+  "outputs": [
+   "Event Mode Required Mask"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Readback the current DTC Event Mode Required Mask used for CFO Event Mode filtering."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 469,
+  "active": true,
+  "generator": false,
+  "name": "Loss-of-Lock Counter Read",
+  "handler": "DTCFrontEndInterface::ReadLossOfLockCounter",
+  "inputs": [],
+  "outputs": [
+   "Upstream Rx Lock Loss Count"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Displays the number of times the CFO Control Link lost CDR lock since the last reset. Use the FE Macro <b>Reset Loss-of-Lock Counter</b> to reset the register counter to zero."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 481,
+  "active": true,
+  "generator": false,
+  "name": "Loss-of-Lock Counter Reset",
+  "handler": "DTCFrontEndInterface::ResetLossOfLockCounter",
+  "inputs": [],
+  "outputs": [
+   "Upstream Rx Lock Loss Count"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Use this FE Macro to reset the Loss-of-Lock register counter to zero. Resetting the DTC will also reset this register."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 492,
+  "active": true,
+  "generator": false,
+  "name": "Spy Buffer",
+  "handler": "DTCFrontEndInterface::SpyBuffer",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Dump the current DAQ DMA C2S buffers to the log (mu2edev::spy with once|wide|stacktrace flags), then issue a DTC SoftReset. Useful for diagnosing parser desync \u2014 captures whatever is sitting in the DMA buffers right now and resets the DTC so subsequent reads start clean."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 505,
+  "active": true,
+  "generator": false,
+  "name": "Release All Data DMA Buffers",
+  "handler": "DTCFrontEndInterface::ReleaseAllDAQBuffers",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Release all currently-held DAQ DMA buffers back to the driver (getDTC()->ReleaseAllBuffers(DTC_DMA_Engine_DAQ))."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 516,
+  "active": true,
+  "generator": false,
+  "name": "Get DTC Counters",
+  "handler": "DTCFrontEndInterface::DTCCounters",
+  "inputs": [],
+  "outputs": [
+   "Protocol Counters",
+   "Performance Counters"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Fetches data from all the counter registers in a human-readable format. Counters include the number of bytes and packets transmitted and received over ROC/CFO links since the last reset. Also includes Event Builder, Jitter Attenuator, Emulated ROC delay, Heartbeat packet and Data Header packet counters since last reset."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 530,
+  "active": true,
+  "generator": false,
+  "name": "Get Link Lock Status",
+  "handler": "DTCFrontEndInterface::GetLinkLockStatus",
+  "inputs": [],
+  "outputs": [
+   "Lock Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read the SERDES CDR Lock bit on all links."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 539,
+  "active": true,
+  "generator": false,
+  "name": "Configure DTC for HWDevmode",
+  "handler": "DTCFrontEndInterface::configureHardwareDevMode",
+  "inputs": [],
+  "outputs": [
+   "Setting the CFO emulated, DCS enabled and the retransmission off"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro prepares the DTC for HW Dev Mode (emulated CFO)."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 550,
+  "active": true,
+  "generator": false,
+  "name": "Read Rx Diag FIFO",
+  "handler": "DTCFrontEndInterface::readRxDiagFIFO",
+  "inputs": [
+   "LinkIndex"
+  ],
+  "outputs": [
+   "Diagnostic RX FIFO"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro reads the ROC link RX diagnostic FIFO buffer from the SERDES. When empty, the FIFO reports 0XDEADDEAD. <b>Note</b>: the FIFO must be read at least once before valid data appears. Reading the FIFO pulses the Read Enable input."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 563,
+  "active": true,
+  "generator": false,
+  "name": "Read Tx Diag FIFO",
+  "handler": "DTCFrontEndInterface::readTxDiagFIFO",
+  "inputs": [
+   "LinkIndex"
+  ],
+  "outputs": [
+   "Diagnostic TX FIFO"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro reads the ROC link TX diagnostic FIFO buffer from the SERDES. When empty, the FIFO reports 0XDEADDEAD. <b>Note</b>: the FIFO must be read at least once before valid data appears. Reading the FIFO pulses the Read Enable input."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 576,
+  "active": true,
+  "generator": false,
+  "name": "Get Link Errors",
+  "handler": "DTCFrontEndInterface::GetLinkErrors",
+  "inputs": [
+   ""
+  ],
+  "outputs": [
+   "Link Errors"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro returns the number of errors on all links since last reset. Errors include the number of times illegal characters, a disparity, PRBS, and CRC error the SERDES has received. It also includes the number of EVB RX packet errors, and number of times the Jitter Attenuator lost the RX Recovered clock and lost the RX External clock since last reset."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 597,
+  "active": true,
+  "generator": false,
+  "name": "Configure for Timing Chain",
+  "handler": "DTCFrontEndInterface::ConfigureForTimingChain",
+  "inputs": [
+   "StepIndex"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 606,
+  "active": true,
+  "generator": false,
+  "name": "Loopback CFO Emulator Test Run",
+  "handler": "DTCFrontEndInterface::CFOEmulatorLoopbackTest",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Executes a loopback test at the DTC's CFO emulator, and broadcasts loopback markers to all ROCs."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 616,
+  "active": true,
+  "generator": false,
+  "name": "Loopback CFO Emulator Multi Test Run",
+  "handler": "DTCFrontEndInterface::CFOEmulatorLoopbackTests",
+  "inputs": [
+   "numberOfTests",
+   "Write ROOT file (Default := false)",
+   "ROOT file name (Default := loopback.root)"
+  ],
+  "outputs": [
+   "Average",
+   "Maximum",
+   "Minimum"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Executes many loopback tests at the DTC's CFO emulator, and broadcasts loopback markers to all ROCs, and returns the average result."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 629,
+  "active": true,
+  "generator": false,
+  "name": "Loopback Manual Setup",
+  "handler": "DTCFrontEndInterface::ManualLoopbackSetup",
+  "inputs": [
+   "setAsPassthrough (Default := false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Toggles the DTC CFO loopback mode. If <b>setAsPassthrough</b> is enabled, CFO loopback is disabled and CFO markers will be transmitted to the next DTC (Normal operation). If <b>setAsPassthrough</b> is disabled, CFO loopback is enabled and the CFO Link SERDES output is routed back to the source. The loopback functionality is managed through the DTC Control Register bit 28."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 645,
+  "active": true,
+  "generator": false,
+  "name": "Enable/Disable DTC Link",
+  "handler": "DTCFrontEndInterface::EnableDTCLink",
+  "inputs": [
+   "Target Link (Default = -1 := all links)",
+   "Set Link RX/TX Enable (Default := false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro enables/disables a target DTC Link 0-7 (i.e., 0-5 ROCs, 6 CFO, 7 EVB)."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 657,
+  "active": true,
+  "generator": false,
+  "name": "Reset ALL (CFO/ROC/EVB) DTC Links",
+  "handler": "DTCFrontEndInterface::ResetDTCLinks",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "This FE Macro resets the SERDES TX/RX links and then the SERDES."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 669,
+  "active": true,
+  "generator": false,
+  "name": "Reset CFO Link Rx",
+  "handler": "DTCFrontEndInterface::ResetCFOLinkRx",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reset the CFO SERDES RX interface."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 678,
+  "active": true,
+  "generator": false,
+  "name": "Reset CFO Link Tx",
+  "handler": "DTCFrontEndInterface::ResetCFOLinkTx",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reset the CFO SERDES TX interface."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 687,
+  "active": true,
+  "generator": false,
+  "name": "Reset CFO Link Rx PLL",
+  "handler": "DTCFrontEndInterface::ResetCFOLinkRxPLL",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reset the CFO SERDES RX PLL."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 696,
+  "active": true,
+  "generator": false,
+  "name": "Reset CFO Link Tx PLL",
+  "handler": "DTCFrontEndInterface::ResetCFOLinkTxPLL",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Reset the CFO SERDES TX PLL."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 708,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 718,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 728,
+  "active": false,
+  "generator": false,
+  "name": "",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 739,
+  "active": true,
+  "generator": false,
+  "name": "Get DTC ID and Hardware EVB Info",
+  "handler": "DTCFrontEndInterface::GetDTCIdAndEVBInfo",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read the fields of the DTC ID and EVB Info register."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 749,
+  "active": true,
+  "generator": false,
+  "name": "Set DTC ID and Hardware EVB Info",
+  "handler": "DTCFrontEndInterface::SetDTCIdAndEVBInfo",
+  "inputs": [
+   "DTC ID",
+   "EVB Mode",
+   "EVB Partition ID",
+   "EVB Self MAC Address Last Byte",
+   "EVB Dead Time in Cluster",
+   "EVB Number of DTCs in Cluster",
+   "EVB Cluster Base DTC MAC Address"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Read the fields of the DTC ID and EVB Info register."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 767,
+  "active": true,
+  "generator": false,
+  "name": "CFO Interface (Emulation) Setup",
+  "handler": "DTCFrontEndInterface::SetupCFOInterface",
+  "inputs": [
+   "Put DTC in CFO Emulation Mode (Default := false)",
+   "Also setup Jitter Attenuator (Default := false)",
+   "Set Link RX/TX Enable (Default := false)",
+   "Enable Auto-generation of Data Request Packets (Default := false)",
+   "Force External CFO Sample Clock Edge (0 for rising-edge, 1 for falling-edge, 2 for auto-find, Default := 0)",
+   "Permanent Offset (-2 to 2, Default := 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Select or Deselect the CFO Emulator to take priority over the Link-6 external CFO. When selected, the CFO timing link, Link-6, will be ignored."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 786,
+  "active": true,
+  "generator": false,
+  "name": "CFO Emulator On/Off Spill Emulation Setup",
+  "handler": "DTCFrontEndInterface::SetCFOEmulatorOnOffSpillEmulation",
+  "inputs": [
+   "Enable CFO Emulator (Default := true)",
+   "Number of 1.4s super cycle repetitions (0 := infinite)",
+   "Starting Event Window Tag (Default or -1 := start from 0 and continue)",
+   "Enable Auto-generation of Data Request Packets (Default := false)",
+   "Enable Clock Markers (Default := false)",
+   "Use Detached Buffer Test (Default := false)",
+   "For Detached Buffer Test, Save Binary Data to File (Default: false)",
+   "For Detached Buffer Test, Save Binary Data Filename",
+   "For Detached Buffer Test, Save Subevent Header to Binary File (Default: false)",
+   "For Detached Buffer Test, Do NOT Reset Counters (Default: false)",
+   "For Detached Buffer Test, Skip-by-32 to Emulate Event Building (Default: false)",
+   "For Detached Buffer Test, Payload Packet Threshold for Saving Event (Default: 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Enable/Disable the CFO Emulator. Disabling turns off output of emulated Event Window Markers, timing markers, and Heartbeat Packets. Enabling turns on emulated Event Window generation and timing markers based on the CFO emulator parameters."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 813,
+  "active": true,
+  "generator": false,
+  "name": "CFO Emulator Fixed-width Event Window Emulation Setup",
+  "handler": "DTCFrontEndInterface::SetCFOEmulatorFixedWidthEmulation",
+  "inputs": [
+   "Enable CFO Emulator (Default := true)",
+   "Fixed-width Event Window Duration (s, ms, us, ns, and clocks allowed) [clocks := 25ns]",
+   "Number of Event Window Markers to generate (0 := infinite)",
+   "Starting Event Window Tag (Default or -1 := start from 0 and continue)",
+   "Event Window Mode (Default := 1)",
+   "Enable Auto-generation of Data Request Packets (Default := false)",
+   "Enable Clock Markers (Default := false)",
+   "Use Detached Buffer Test (Default := false)",
+   "For Detached Buffer Test, Save Binary Data to File (Default: false)",
+   "For Detached Buffer Test, Save Binary Data Filename",
+   "For Detached Buffer Test, Save Subevent Header to Binary File (Default: false)",
+   "For Detached Buffer Test, Do NOT Reset Counters (Default: false)",
+   "For Detached Buffer Test, Skip-by-32 to Emulate Event Building (Default: false)",
+   "For Detached Buffer Test, Payload Packet Threshold for Saving Event (Default: 0)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Enable/Disable the CFO Emulator. Disabling turns off output of emulated Event Window Markers, timing markers, and Heartbeat Packets. Enabling turns on emulated Event Window generation and timing markers based on the CFO emulator parameters."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 843,
+  "active": true,
+  "generator": false,
+  "name": "DTC Software Data Request",
+  "handler": "DTCFrontEndInterface::SoftwareDataRequest",
+  "inputs": [
+   "Event Window Tag"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Send a software DR from the DTC."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 853,
+  "active": true,
+  "generator": false,
+  "name": "DTC Punched Clock",
+  "handler": "DTCFrontEndInterface::PunchedClock",
+  "inputs": [
+   "Enable (Default := true)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "*",
+  "description": "Punched Clock Enable/Disable."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 863,
+  "active": true,
+  "generator": false,
+  "name": "Program ROCs",
+  "handler": "DTCFrontEndInterface::ProgramROCs",
+  "inputs": [
+   "Target ROC or Mask (Default = -1 := all ROCs, or 0x111111 := all)",
+   "Path to Directory map file (Default := do not use)",
+   "Write Directory map to SPI Flash (Default := false)",
+   "Verify Directory map (Default := false)",
+   "Image Index (Default := 0)",
+   "Path to Bitfile (Default := do not write bitfile, only program from Image Index)",
+   "Write Bitfile to SPI Flash (Default := false)",
+   "For Debug, force Write size (Default := do not force)",
+   "Verify with Bitfile Readback (Default := false)",
+   "Do program from Image Index (Default := false)"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Program one or many ROCs with an indexed image in the SPI, or the bitfile at a specified filepath. Use Link=7 with Mask to choose more than 1 ROC manually with the mask."
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 888,
+  "active": true,
+  "generator": false,
+  "name": "Validate DTC Control Registers",
+  "handler": "DTCFrontEndInterface::ValidateDTCControlRegisters",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "*",
+  "description": "Tests each DTC Control Register (address 0x9100)"
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 948,
+  "active": true,
+  "generator": false,
+  "name": "",
+  "handler": "DTCFrontEndInterface::RunROCFEMacro",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/DTCFrontEndInterfaceImpl.cc",
+  "line": 981,
+  "active": true,
+  "generator": false,
+  "name": "",
+  "handler": "DTCFrontEndInterface::RunROCFEMacro",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/ROCPolarFireCoreInterfaceImpl.cc",
+  "line": 20,
+  "active": true,
+  "generator": false,
+  "name": "Setup for Pattern Data Taking",
+  "handler": "ROCPolarFireCoreInterface::SetupForPatternDataTaking",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/ROCPolarFireCoreInterfaceImpl.cc",
+  "line": 27,
+  "active": true,
+  "generator": false,
+  "name": "Read SPI Flash Block",
+  "handler": "ROCPolarFireCoreInterface::ReadSPIFlashBlock",
+  "inputs": [
+   "Start Address",
+   "Number of Bytes"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/ROCPolarFireCoreInterfaceImpl.cc",
+  "line": 35,
+  "active": true,
+  "generator": false,
+  "name": "Write SPI Flash Directory",
+  "handler": "ROCPolarFireCoreInterface::WriteSPIFlashDirectory",
+  "inputs": [
+   "Path to Directory Map file"
+  ],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/ROCPolarFireCoreInterfaceImpl.cc",
+  "line": 43,
+  "active": true,
+  "generator": false,
+  "name": "Erase SPI Flash Block",
+  "handler": "ROCPolarFireCoreInterface::EraseSPIFlashBlock",
+  "inputs": [
+   "Start Address",
+   "Number of Bytes"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/FEInterfaces/ROCPolarFireCoreInterfaceImpl.cc",
+  "line": 51,
+  "active": true,
+  "generator": false,
+  "name": "Force Clear Action Lock",
+  "handler": "ROCPolarFireCoreInterface::ForceClearActionLock",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/ROCCore/ROCCoreVInterface.cc",
+  "line": 62,
+  "active": true,
+  "generator": false,
+  "name": "Get ROC Status",
+  "handler": "ROCCoreVInterface::GetStatus",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e",
+  "file": "otsdaq-mu2e/otsdaq-mu2e/ROCCore/ROCCoreVInterface.cc",
+  "line": 68,
+  "active": true,
+  "generator": false,
+  "name": "Get ROC Firmware Version",
+  "handler": "ROCCoreVInterface::GetFirmwareVersion",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 51,
+  "active": false,
+  "generator": false,
+  "name": "Setup for Pattern Data Taking",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 59,
+  "active": true,
+  "generator": false,
+  "name": "Setup for Fixed-length Pattern Data Taking",
+  "handler": "ROCCalorimeterInterface::SetupForPatternFixedLengthDataTaking",
+  "inputs": [
+   "Fixed Length of Event [units of 16-bit words, Default := 8]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 66,
+  "active": true,
+  "generator": false,
+  "name": "Send Mz Command",
+  "handler": "ROCCalorimeterInterface::SendMzCommand",
+  "inputs": [
+   "command tag from mz manual",
+   "argument 0, Default := 0]",
+   "argument 1, Default := 0]",
+   "argument 2, Default := 0]",
+   "argument 3, Default := 0]",
+   "argument 4, Default := 0]",
+   "argument 5, Default := 0]",
+   "argument 6, Default := 0]",
+   "argument 7, Default := 0]",
+   "argument 8, Default := 0]",
+   "argument 9, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 82,
+  "active": true,
+  "generator": false,
+  "name": "Enable and Power SiPMs",
+  "handler": "ROCCalorimeterInterface::EnableAndPowerSiPMs",
+  "inputs": [
+   "HV Enabled, Default := 0]",
+   "Bias voltage to set, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 88,
+  "active": true,
+  "generator": false,
+  "name": "Enable/Disable MZB Leds",
+  "handler": "ROCCalorimeterInterface::EnableDisableLEDs",
+  "inputs": [
+   "Enable LEDs, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 94,
+  "active": true,
+  "generator": false,
+  "name": "Find BoardID From Serial",
+  "handler": "ROCCalorimeterInterface::FindBoardIDFromSerial",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 100,
+  "active": true,
+  "generator": false,
+  "name": "Set Board Voltages",
+  "handler": "ROCCalorimeterInterface::SetBoardVoltages",
+  "inputs": [
+   "configuration folder, Default:= nominal",
+   "Left/Right, Default := 0]",
+   "Board Number in Crate, Default := 0]",
+   "Crate Number, Default := 0]",
+   "Half Number, Default := 0]",
+   "Disk Number, Default := 0]",
+   "Board ID, Default := -1]",
+   "HV Enabled, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 113,
+  "active": true,
+  "generator": false,
+  "name": "Configure Link",
+  "handler": "ROCCalorimeterInterface::ConfigureLink",
+  "inputs": [
+   "Configuration folder, Default:= nominal",
+   "HV Enabled, Default := 0]",
+   "Upload MZB calibration parameters, Default := 0]",
+   "Upload DiRAC thresholds, Default := 0]",
+   "Offset, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 124,
+  "active": true,
+  "generator": false,
+  "name": "Calibrate Mzb",
+  "handler": "ROCCalorimeterInterface::CalibrateMZB",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 130,
+  "active": true,
+  "generator": false,
+  "name": "SetADCsThresholds",
+  "handler": "ROCCalorimeterInterface::SetADCsThresholds",
+  "inputs": [
+   "Offset, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 136,
+  "active": true,
+  "generator": false,
+  "name": "ReadVoltagesFromDB",
+  "handler": "ROCCalorimeterInterface::ReadVoltagesFromDB",
+  "inputs": [
+   ""
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 142,
+  "active": true,
+  "generator": false,
+  "name": "ReadChannelStatusFromDB",
+  "handler": "ROCCalorimeterInterface::ReadChannelStatusFromDB",
+  "inputs": [
+   ""
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 148,
+  "active": true,
+  "generator": false,
+  "name": "Print ROC Configuration",
+  "handler": "ROCCalorimeterInterface::PrintROCConfiguration",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 154,
+  "active": true,
+  "generator": false,
+  "name": "SetupForNoiseTaking",
+  "handler": "ROCCalorimeterInterface::SetupForNoiseTaking",
+  "inputs": [
+   "Number of noise samples per evt [Default := 20]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 160,
+  "active": true,
+  "generator": false,
+  "name": "Read ROC Error Counter",
+  "handler": "ROCCalorimeterInterface::ReadROCErrorCounter",
+  "inputs": [
+   "Address to read, Default := 0]"
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 166,
+  "active": true,
+  "generator": false,
+  "name": "Setup for ADCs Data Taking",
+  "handler": "ROCCalorimeterInterface::SetupForADCsDataTaking",
+  "inputs": [
+   "Set Threshold? [bool, Default := 0]",
+   "Threshold [units of adccounts, Default := 2300]",
+   "Is new Firmware? [bool, Default := 0]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 173,
+  "active": true,
+  "generator": false,
+  "name": "Toggle MB Busy for Noise",
+  "handler": "ROCCalorimeterInterface::ToggleMBBusy",
+  "inputs": [
+   "On/Off [Busy On/Off, Default := 1]"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 179,
+  "active": true,
+  "generator": false,
+  "name": "ROC Status",
+  "handler": "ROCCalorimeterInterface::GetStatus",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 185,
+  "active": true,
+  "generator": false,
+  "name": "MZB Status",
+  "handler": "ROCCalorimeterInterface::GetMZBStatus",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 191,
+  "active": true,
+  "generator": false,
+  "name": "ROC Slow Control",
+  "handler": "ROCCalorimeterInterface::ROCSlowControl",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 197,
+  "active": true,
+  "generator": false,
+  "name": "TRAD Slow Control",
+  "handler": "ROCCalorimeterInterface::TRADSlowControl",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 203,
+  "active": true,
+  "generator": false,
+  "name": "TRAD Set Mask",
+  "handler": "ROCCalorimeterInterface::TRADSetMask",
+  "inputs": [
+   "Set Mask as series of bit (0 enabled, 1 disabled) Default := 0"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 209,
+  "active": true,
+  "generator": false,
+  "name": "Read MB Registers",
+  "handler": "ROCCalorimeterInterface::ReadMBRegisters",
+  "inputs": [
+   "Number of 16 bits words to read, Default := 20]",
+   "Mezzanine Address, Default := 0]"
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 215,
+  "active": true,
+  "generator": false,
+  "name": "Evaluate BlockWrite Error Rate",
+  "handler": "ROCCalorimeterInterface::EvaluateBlockWriteErrorRate",
+  "inputs": [
+   "Number of test loops, Default := 900]",
+   "Number of 16-bits words in a block transfer, Default := 500]"
+  ],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 223,
+  "active": false,
+  "generator": false,
+  "name": "SetROCCaloVoltageChannel",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 230,
+  "active": false,
+  "generator": false,
+  "name": "GetROCCaloVoltageChannel",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 237,
+  "active": true,
+  "generator": false,
+  "name": "Configure State Machine",
+  "handler": "ROCCalorimeterInterface::Configure",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 244,
+  "active": false,
+  "generator": false,
+  "name": "GetROCCaloTemperatureChannel",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-calorimeter",
+  "file": "otsdaq-mu2e-calorimeter/otsdaq-mu2e-calorimeter/FEInterfaces/ROCCalorimeterInterface_interface.cc",
+  "line": 251,
+  "active": true,
+  "generator": false,
+  "name": "Create Global ROC Table",
+  "handler": "ROCCalorimeterInterface::CreateGlobalROCTable",
+  "inputs": [],
+  "outputs": [
+   "Status"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 30,
+  "active": true,
+  "generator": false,
+  "name": "Do the CRV Dance",
+  "handler": "ROCCosmicRayVetoInterface::DoTheCRV_Dance",
+  "inputs": [
+   "Which Step"
+  ],
+  "outputs": [
+   "Random Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 37,
+  "active": true,
+  "generator": false,
+  "name": "Do the CRV Fancy Dance",
+  "handler": "ROCCosmicRayVetoInterface::DoTheCRV_Dance2",
+  "inputs": [
+   "Which Step"
+  ],
+  "outputs": [
+   "Random Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 44,
+  "active": true,
+  "generator": false,
+  "name": "Get Firmware Version",
+  "handler": "ROCCosmicRayVetoInterface::GetFirmwareVersion",
+  "inputs": [],
+  "outputs": [
+   "version",
+   "git hash"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 51,
+  "active": true,
+  "generator": false,
+  "name": "Get Test Counter",
+  "handler": "ROCCosmicRayVetoInterface::GetTestCounter",
+  "inputs": [],
+  "outputs": [
+   "counter"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 58,
+  "active": true,
+  "generator": false,
+  "name": "Set Test Counter",
+  "handler": "ROCCosmicRayVetoInterface::SetTestCounter",
+  "inputs": [
+   "Set Counter (Default: 0)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 65,
+  "active": true,
+  "generator": false,
+  "name": "Reset uC",
+  "handler": "ROCCosmicRayVetoInterface::HardReset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 72,
+  "active": true,
+  "generator": false,
+  "name": "Set Input Mask",
+  "handler": "ROCCosmicRayVetoInterface::SetInputMask",
+  "inputs": [
+   "mask (Default: 0xffffff)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 79,
+  "active": true,
+  "generator": false,
+  "name": "Configure CRV (FEBI)",
+  "handler": "ROCCosmicRayVetoInterface::Configure",
+  "inputs": [
+   "hard resets (Default: false)",
+   "bias (Default: 0xaac)",
+   "threshold (Default: 0xc)",
+   "spill length (Default: 0xff)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 89,
+  "active": true,
+  "generator": false,
+  "name": "Configure ROC",
+  "handler": "ROCCosmicRayVetoInterface::RocConfigure",
+  "inputs": [
+   "send GR packages (Default: false)",
+   "# of counter packages (Default: 0)",
+   "uB offset (if not GR) (Default: 0xa)",
+   "ROC timeout, units of 6.25ns, off: 0xffff (Default: off)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 102,
+  "active": true,
+  "generator": false,
+  "name": "FEB Configure",
+  "handler": "ROCCosmicRayVetoInterface::FebConfigure",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 109,
+  "active": true,
+  "generator": false,
+  "name": "Soft Reset",
+  "handler": "ROCCosmicRayVetoInterface::SoftReset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 116,
+  "active": true,
+  "generator": false,
+  "name": "Get Status",
+  "handler": "ROCCosmicRayVetoInterface::GetStatus",
+  "inputs": [],
+  "outputs": [
+   "version",
+   "git hash",
+   "CR",
+   "Send GR",
+   "Loopback Mode",
+   "PLL lock",
+   "Active Ports",
+   "Uptime",
+   "Link Errors Loss",
+   "Link Errors CRC",
+   "Test Cnt",
+   "Marker Decoded Cnt",
+   "Marker Delayed Cnt",
+   "Heartbeat Rx Cnt",
+   "Heartbeat Tx Cnt",
+   "DR Cnt",
+   "Injection Cnt",
+   "Loopback Markers (fiber) Cnt",
+   "Last Event Length (12.5ns)",
+   "Injection Length (12.5ns)",
+   "Injection Timestamp"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 143,
+  "active": true,
+  "generator": false,
+  "name": "Get Status Pretty",
+  "handler": "ROCCosmicRayVetoInterface::GetStatusPretty",
+  "inputs": [],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 149,
+  "active": true,
+  "generator": false,
+  "name": "Get POOL",
+  "handler": "ROCCosmicRayVetoInterface::GetPool",
+  "inputs": [
+   "Port (Default: -1)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 156,
+  "active": true,
+  "generator": false,
+  "name": "FEB Get Status Pretty",
+  "handler": "ROCCosmicRayVetoInterface::GetFebStatusPretty",
+  "inputs": [
+   "Port (Default: -1)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 163,
+  "active": true,
+  "generator": false,
+  "name": "FEB Take Pedestral",
+  "handler": "ROCCosmicRayVetoInterface::FebTakePedestral",
+  "inputs": [
+   "Port (Default: -1)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 170,
+  "active": true,
+  "generator": false,
+  "name": "Read Fiber Rx",
+  "handler": "ROCCosmicRayVetoInterface::FiberRx",
+  "inputs": [
+   "number of packages (Default: 10)"
+  ],
+  "outputs": [
+   "buffer"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 177,
+  "active": true,
+  "generator": false,
+  "name": "Read Fiber Tx",
+  "handler": "ROCCosmicRayVetoInterface::FiberTx",
+  "inputs": [
+   "number of packages (Default: 10)"
+  ],
+  "outputs": [
+   "buffer"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 184,
+  "active": true,
+  "generator": false,
+  "name": "Set Loopback Mode",
+  "handler": "ROCCosmicRayVetoInterface::SetLoopbackMode",
+  "inputs": [
+   "loopback mode (Default: 0)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 191,
+  "active": true,
+  "generator": false,
+  "name": "FEB Set Bias",
+  "handler": "ROCCosmicRayVetoInterface::FebSetBias",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "number [0,1]",
+   "bias"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 201,
+  "active": true,
+  "generator": false,
+  "name": "FEB Set Bias Trim",
+  "handler": "ROCCosmicRayVetoInterface::FebSetBiasTrim",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "channel [0-15]",
+   "bias trim"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 211,
+  "active": true,
+  "generator": false,
+  "name": "FEB Set Threshold",
+  "handler": "ROCCosmicRayVetoInterface::FebSetThreshold",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "channel [0-15]",
+   "threshold"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 221,
+  "active": true,
+  "generator": false,
+  "name": "FEBs Set Pipeline Delay",
+  "handler": "ROCCosmicRayVetoInterface::FebSetPipeline",
+  "inputs": [
+   "pipeline delay (Default 5)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 228,
+  "active": true,
+  "generator": false,
+  "name": "FEBs CMBENA",
+  "handler": "ROCCosmicRayVetoInterface::FebCMBENA",
+  "inputs": [
+   "value (Default 1)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 235,
+  "active": true,
+  "generator": false,
+  "name": "PWRRST",
+  "handler": "ROCCosmicRayVetoInterface::PWRRST",
+  "inputs": [
+   "port (Default 25 - all)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 241,
+  "active": true,
+  "generator": false,
+  "name": "Histogram",
+  "handler": "ROCCosmicRayVetoInterface::GetHistograms",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "channel [0-15]",
+   "interval (Default 2s) [ms]",
+   "filename (Default: histogram.csv)",
+   "number of bins (Default all: 0x400)"
+  ],
+  "outputs": [
+   "buffer"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 254,
+  "active": true,
+  "generator": false,
+  "name": "Register Dump",
+  "handler": "ROCCosmicRayVetoInterface::RegDump",
+  "inputs": [],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 261,
+  "active": false,
+  "generator": false,
+  "name": "FEB II Configure",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 271,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Threshold",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetThreshold",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3], -1 all (Default)",
+   "channel [0-15], -1 all (Default)",
+   "threshold"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 282,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Bias",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetBias",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "number [0,1]",
+   "bias"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 293,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Bias Trim",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetBiasTrim",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3]",
+   "channel [0-15]",
+   "bias trim"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 304,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Gate OnSpill",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetGateOnSpill",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "gate start, 6.25ns (Default: 16)",
+   "gate end, 6.25ns (Default: 255)",
+   "use broadcast when port=0 (Default: true)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 314,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Gate OffSpill",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetGateOffSpill",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "gate start, 6.25ns (Default: 16)",
+   "gate end, 6.25ns (Default: 15000)",
+   "use broadcast when port=0 (Default: true)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 324,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set Channel",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetChannel",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "fpga [0,1,2,3], -1 all (Default)",
+   "channel [0-15], -1 all (Default)",
+   "fake (Default: false)",
+   "off (Default: false)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 334,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Get Status",
+  "handler": "ROCCosmicRayVetoInterface::FebIIGetStatus",
+  "inputs": [
+   "port (Default: -1, current active)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 342,
+  "active": true,
+  "generator": false,
+  "name": "Test FEB Connection",
+  "handler": "ROCCosmicRayVetoInterface::TestFebConnection",
+  "inputs": [
+   "register (Default: 0x1023 = CntLO)",
+   "port (Default: 0 = all active, >0 = single)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 352,
+  "active": true,
+  "generator": false,
+  "name": "Test ROC Links",
+  "handler": "ROCCosmicRayVetoInterface::TestRocLinks",
+  "inputs": [],
+  "outputs": [
+   "result",
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 358,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Set AFE Offset",
+  "handler": "ROCCosmicRayVetoInterface::FebIISetAFEOffset",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "offset (in range [-512, 511])"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 365,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Baselines",
+  "handler": "ROCCosmicRayVetoInterface::FebIIGetBaselines",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "re-measure (Default: false)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 372,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Trigger Baselines",
+  "handler": "ROCCosmicRayVetoInterface::FebIITrigBaselines",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "channel [0-63] (Default: -1, all)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 379,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Configure",
+  "handler": "ROCCosmicRayVetoInterface::FebIIConfigure",
+  "inputs": [
+   "port (Default: -1: current active, 0: all)",
+   "use broadcast when port=0 (Default: true)",
+   "run ROC clock align sequence (Default: true)",
+   "bias (Default: 0xaaf)",
+   "skip bias (Default: false)",
+   "threshold (Default: 0x50)",
+   "update baseline (Default: true)",
+   "onSpillGateEnd (Default: 255, 6.25ns)",
+   "offSpillGateEnd (Default: 15000, 6.25ns)",
+   "pll reset (Default: true)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 396,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Configure from Tables",
+  "handler": "ROCCosmicRayVetoInterface::FebIIConfigureFromTables",
+  "inputs": [
+   "skip bias (Default: false)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-crv",
+  "file": "otsdaq-mu2e-crv/otsdaq-mu2e-crv/FEInterfaces/ROCCosmicRayVetoInterface_interface.cc",
+  "line": 403,
+  "active": true,
+  "generator": false,
+  "name": "FEB II Reset and Align",
+  "handler": "ROCCosmicRayVetoInterface::FebIIAlign",
+  "inputs": [
+   "port (Default: -1, current active)",
+   "re-lock PLL (Default: true)",
+   "run ROC clock align sequence (Default: true)",
+   "sleep for lock [ms] (Default: 1000)",
+   "sleep [us] (Default: 1000)"
+  ],
+  "outputs": [
+   "response"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 37,
+  "active": true,
+  "generator": false,
+  "name": "Configure State Machine",
+  "handler": "ROCMobileSyncInterface::Configure",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 45,
+  "active": true,
+  "generator": false,
+  "name": "Read Histograms",
+  "handler": "ROCMobileSyncInterface::ReadMarkerHistograms",
+  "inputs": [],
+  "outputs": [
+   "Plotly_Plot0",
+   "Plotly_Plot1",
+   "Plotly_Plot2",
+   "histograms"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 54,
+  "active": true,
+  "generator": false,
+  "name": "Reset",
+  "handler": "ROCMobileSyncInterface::Reset",
+  "inputs": [],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 61,
+  "active": true,
+  "generator": false,
+  "name": "Setup For Run",
+  "handler": "ROCMobileSyncInterface::PrepareDataRuns",
+  "inputs": [
+   "Enable Delay (Default := true)",
+   "Delay amount (Default := 0)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 70,
+  "active": true,
+  "generator": false,
+  "name": "Selective Reset",
+  "handler": "ROCMobileSyncInterface::SelectiveReset",
+  "inputs": [
+   "40MHz Clock Generator (Default := false)",
+   "Forward Detector (Default := false)",
+   "Command Handler (Default := false)",
+   "Timestamp Manager (Default := false)",
+   "DCS Receive FIFO (Default := false)",
+   "ROC Monitor (Default := false)",
+   "DCS Response FIFO (Default := false)",
+   "Packet Sender (Default := false)",
+   "Receive FIFO (Default := false)",
+   "Response FIFO (Default := false)",
+   "BERT (Default := false)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 84,
+  "active": true,
+  "generator": false,
+  "name": "Reset Histograms",
+  "handler": "ROCMobileSyncInterface::ResetHistograms",
+  "inputs": [
+   "Forward Detector Loopback Markers (Default := false)",
+   "Forward Detector Clock Markers (Default := false)",
+   "Forward Detector Event Markers (Default := false)",
+   "Timestamp Manager Event Markers (Default := false)",
+   "Packet Sender Loopback Markers(Default := false)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 97,
+  "active": true,
+  "generator": false,
+  "name": "Read Rx FIFO",
+  "handler": "ROCMobileSyncInterface::ReadRxFIFO",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 105,
+  "active": true,
+  "generator": false,
+  "name": "Read Tx FIFO",
+  "handler": "ROCMobileSyncInterface::ReadTxFIFO",
+  "inputs": [],
+  "outputs": [
+   "Result"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-sync",
+  "file": "otsdaq-mu2e-sync/otsdaq-mu2e-sync/FEInterfaces/ROCMobileSyncInterface_interface.cc",
+  "line": 113,
+  "active": true,
+  "generator": false,
+  "name": "BERT Setup",
+  "handler": "ROCMobileSyncInterface::BERT",
+  "inputs": [
+   "Transmit PRBS7 (Default := false)",
+   "BER Received data (Default := false)",
+   "RX fixed pattern (Default := true)",
+   "External loopback mode (Default := false)"
+  ],
+  "outputs": [],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/otsdaq-mu2e-tracker/FEInterfaces/ROCTrackerInterface_interface.cc",
+  "line": 22,
+  "active": true,
+  "generator": false,
+  "name": "Read Register",
+  "handler": "ROCTrackerInterface::ReadRegister",
+  "inputs": [
+   "Address"
+  ],
+  "outputs": [
+   "Value"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/otsdaq-mu2e-tracker/FEInterfaces/ROCTrackerInterface_interface.cc",
+  "line": 30,
+  "active": true,
+  "generator": false,
+  "name": "Reset Counters",
+  "handler": "ROCTrackerInterface::ResetCounters",
+  "inputs": [],
+  "outputs": [
+   "Return Code"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/otsdaq-mu2e-tracker/FEInterfaces/ROCTrackerInterface_interface.cc",
+  "line": 38,
+  "active": true,
+  "generator": false,
+  "name": "Find Alignment",
+  "handler": "ROCTrackerInterface::FindAlignment",
+  "inputs": [],
+  "outputs": [
+   "Success",
+   "Summary"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/otsdaq-mu2e-tracker/FEInterfaces/ROCTrackerInterface_interface.cc",
+  "line": 46,
+  "active": true,
+  "generator": false,
+  "name": "Set Threshold",
+  "handler": "ROCTrackerInterface::SetThreshold",
+  "inputs": [
+   "Channel",
+   "Preamp",
+   "DAC value",
+   "PrintLevel"
+  ],
+  "outputs": [
+   "Success"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/otsdaq-mu2e-tracker/FEInterfaces/ROCTrackerInterface_interface.cc",
+  "line": 55,
+  "active": true,
+  "generator": false,
+  "name": "Measure Threshold",
+  "handler": "ROCTrackerInterface::MeasureThreshold",
+  "inputs": [
+   "Channel"
+  ],
+  "outputs": [
+   "Readback count",
+   "Cal",
+   "HV",
+   "Total"
+  ],
+  "permission": "1",
+  "callers": "",
+  "description": ""
+ },
+ {
+  "package": "otsdaq-mu2e-tracker",
+  "file": "otsdaq-mu2e-tracker/tools/otsdaq_import_tracker_test_stand.cc",
+  "line": 1207,
+  "active": true,
+  "generator": true,
+  "name": "\",                             static_cast<FEVInterface::frontEndMacroFunction_t>(                                 &ROCTrackerInterface::FEMacro__),                             std::vector<std::string>{outLinkLinkMask, \" (Default = )\"},          \n\t\t\t\t\toutputFeMacroRegisterFile\n\t\t\t\t\t    << ;\n\t\t\t\t\tfor(size_t o = 0, ocount = 0; o < outputNames.size();\n\t\t\t\t\t    o++)  \n\t\t\t\t\t{\n\t\t\t\t\t\tif(outputTypes[o] == )\n\t\t\t\t\t\t\tcontinue;  \n\n\t\t\t\t\t\tif(ocount > 0)\n\t\t\t\t\t\t\toutputFeMacroRegisterFile << ;\n\t\t\t\t\t\toutputFeMacroRegisterFile << \"},  \n\t\t\t\t\toutputFeMacroRegisterFile << requiredUserPermissions  \n\t\t\t\t\t                           \n\t\t\t\t\t                           ;\n\t\t\t\t\toutputFeMacroDefineFile\n\t\t\t\t\t    << () \n\t\t\t\t\toutputFeMacroDefineFile << headerInstructionsSs.str();\n\t\t\t\t\toutputFeMacroDefineFile\n\t\t\t\t\t    <<  << prepend[i] << \n\t\t\t\t\t    << functionHeader.substr(0, functionHeader.find('('))\n\t\t\t\t\t    << ;\n\t\t\t\t\toutputFeMacroDefineFile <<\n\t\t\t\t\t    R# of input args = # of output args = : ;\n\n\t\t\t\t\tfor(size_t o = 0; o < argNames.size(); o++)  \n\t\t\t\t\t{\n\t\t\t\t\t\tif((argTypes[o].size() == 3 || argTypes[o].size() == 4) &&\n\t\t\t\t\t\t   argTypes[o].find() == 0)\n\t\t\t\t\t\t\tcontinue;  \n\n\t\t\t\t\t\tif(argTypes[o].find('&') !=\n\t\t\t\t\t\t   std::string::npos)  \n\t\t\t\t\t\t                       \n\t\t\t\t\t\t\toutputFeMacroDefineFile\n\t\t\t\t\t\t\t    <<  << argTypes[o].substr(0, argTypes[o].size() - 1)\n\t\t\t\t\t\t\t    <<  << argNames[o] << ;\n\t\t\t\t\t\telse\n\t\t\t\t\t\t\toutputFeMacroDefineFile <<  << argTypes[o] << \n\t\t\t\t\t\t\t                        << argNames[o] << ;\n\n\t\t\t\t\t\tif(argNames[o] ==\n\t\t\t\t\t\t   )  \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\toutputFeMacroDefineFile\n\t\t\t\t\t\t\t    << ;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse if(argNames[o] == )  \n\t\t\t\t\t\t                                    \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\toutputFeMacroDefineFile\n\t\t\t\t\t\t\t    << ;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse  \n\t\t\t\t\t\t{\n\t\t\t\t\t\t\toutputFeMacroDefineFile << \n\t\t\t\t\t\t\t                        <<  (Default = )\", \", , );  voidstd::ostream&\\tstd::stringstream ; \\t ; \\t ; \\t ;  void\\t = \\t\\ttrackerDTC_->(, out*&);  voidstd::vector\\t__SET_ARG_OUT__(\"\", StringMacros::vectorToString()); std::ostream&\\t__COUT_MULTI__(2, .str()); \\t__SET_ARG_OUT__(\"\", .str()); \\t__SET_ARG_OUT__(\"\", );  } \n\t\t\t\t\t    << functionHeader.substr(0, functionHeader.find('(')) << ;\n\t\t\t\t}  \n\n\t\t\t\t\n\t\t\t\toutputFile.flush();\n\t\t\t\toutputHeaderFile.flush();\n\t\t\t\toutputFeMacroDeclareFile.flush();\n\t\t\t\toutputFeMacroRegisterFile.flush();\n\t\t\t\toutputFeMacroDefineFile.flush();\n\n\t\t\t\t\n\t\t\t}  \n\n\t\t\toutputFile << \n\t\t\toutputFeMacroDeclareFile << \n\t\t\toutputFeMacroDefineFile << Successfully wrote output file at Successfully wrote header file at Successfully wrote FE Macro declaration file at Successfully wrote FE Macro registration file at Successfully wrote FE Macro define file at   std::runtime_error:   std::exception:   Unknown exception occurred.There were  errors found while importing. See below: \\t: End of errors.  There were NO ERRORS found while loading and exporting groups.Import of Tracker Test Stand complete! ImportTrackerTestStand",
+  "handler": "",
+  "inputs": [],
+  "outputs": [],
+  "permission": "",
+  "callers": "",
+  "description": ""
+ }
+]
