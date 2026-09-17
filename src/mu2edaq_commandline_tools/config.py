@@ -23,6 +23,7 @@ defaults are a usable configuration.
 from __future__ import annotations
 
 import os
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 
@@ -33,14 +34,27 @@ except ImportError:  # PyYAML is a declared dependency, but stay usable without 
 
 ENV_PREFIX = "MU2EDAQ_TOOLS_"
 
-#: Built-in defaults. Keys map 1:1 onto MU2EDAQ_TOOLS_<KEY> environment
-#: variables and onto top-level keys in the YAML config file.
+#: Built-in defaults. The original flat keys map 1:1 onto
+#: MU2EDAQ_TOOLS_<KEY>; otsdaq has its own documented nested overrides.
+OTSDAQ_DEFAULTS: Dict[str, Any] = {
+    "default_instance": None,
+    "timeout": 10.0,
+    "verify_tls": False,
+    "ca_bundle": None,
+    "gateway_url": None,
+    "slow_controls_url": None,
+    "tfm_url": None,
+    "cookie_file": None,
+    "instances": {},
+}
+
 DEFAULTS: Dict[str, Any] = {
     "cluster": "mu2edaq",
     "discovery_timeout": 2.0,
     "log_level": "INFO",
     "log_dir": "logs",
     "color": True,
+    "otsdaq": OTSDAQ_DEFAULTS,
 }
 
 #: Coercion applied to values coming from YAML or the environment, so that
@@ -48,6 +62,20 @@ DEFAULTS: Dict[str, Any] = {
 _COERCE = {
     "discovery_timeout": float,
     "color": lambda v: str(v).strip().lower() in ("1", "true", "yes", "on"),
+}
+
+_OTSDAQ_ENV = {
+    "INSTANCE": ("default_instance", str),
+    "TIMEOUT": ("timeout", float),
+    "VERIFY_TLS": (
+        "verify_tls",
+        lambda v: str(v).strip().lower() in ("1", "true", "yes", "on"),
+    ),
+    "CA_BUNDLE": ("ca_bundle", str),
+    "GATEWAY_URL": ("gateway_url", str),
+    "SLOW_CONTROLS_URL": ("slow_controls_url", str),
+    "TFM_URL": ("tfm_url", str),
+    "COOKIE_FILE": ("cookie_file", str),
 }
 
 
@@ -59,6 +87,34 @@ def _coerce(key: str, value: Any) -> Any:
         return fn(value)
     except (TypeError, ValueError):
         return value
+
+
+def _merge_otsdaq(base: Dict[str, Any], update: Any) -> Dict[str, Any]:
+    """Merge the supported nested otsdaq configuration keys."""
+    out = deepcopy(base)
+    if not isinstance(update, dict):
+        return out
+    for key in OTSDAQ_DEFAULTS:
+        if key not in update:
+            continue
+        if key == "instances":
+            if isinstance(update[key], dict):
+                out[key] = deepcopy(update[key])
+        elif key == "timeout":
+            try:
+                out[key] = float(update[key])
+            except (TypeError, ValueError):
+                out[key] = update[key]
+        elif key == "verify_tls":
+            out[key] = str(update[key]).strip().lower() in (
+                "1",
+                "true",
+                "yes",
+                "on",
+            )
+        else:
+            out[key] = update[key]
+    return out
 
 
 def config_search_paths(explicit: Optional[str] = None) -> Iterable[Path]:
@@ -96,7 +152,21 @@ def load_file(path: Optional[Path]) -> Dict[str, Any]:
         data = yaml.safe_load(fh) or {}
     if not isinstance(data, dict):
         raise ValueError("%s: top level of the config file must be a mapping" % path)
-    return {k: _coerce(k, v) for k, v in data.items() if k in DEFAULTS}
+    out = {k: _coerce(k, v) for k, v in data.items() if k in DEFAULTS and k != "otsdaq"}
+    if "otsdaq" in data:
+        if not isinstance(data["otsdaq"], dict):
+            raise ValueError("%s: otsdaq must be a mapping" % path)
+        instances = data["otsdaq"].get("instances")
+        if instances is not None:
+            if not isinstance(instances, dict):
+                raise ValueError("%s: otsdaq.instances must be a mapping" % path)
+            for name, profile in instances.items():
+                if not isinstance(profile, dict):
+                    raise ValueError(
+                        "%s: otsdaq instance %r must be a mapping" % (path, name)
+                    )
+        out["otsdaq"] = _merge_otsdaq(OTSDAQ_DEFAULTS, data["otsdaq"])
+    return out
 
 
 def load_env(environ: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
@@ -104,9 +174,22 @@ def load_env(environ: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
     environ = os.environ if environ is None else environ
     out: Dict[str, Any] = {}
     for key in DEFAULTS:
+        if key == "otsdaq":
+            continue
         raw = environ.get(ENV_PREFIX + key.upper())
         if raw is not None and raw != "":
             out[key] = _coerce(key, raw)
+    otsdaq = {}
+    for suffix, (key, coerce) in _OTSDAQ_ENV.items():
+        raw = environ.get(ENV_PREFIX + "OTSDAQ_" + suffix)
+        if raw is None or raw == "":
+            continue
+        try:
+            otsdaq[key] = coerce(raw)
+        except (TypeError, ValueError):
+            otsdaq[key] = raw
+    if otsdaq:
+        out["otsdaq"] = otsdaq
     return out
 
 
@@ -121,12 +204,20 @@ def load(
     entries whose value is None are ignored so that an unset argparse option
     does not clobber a lower-precedence source.
     """
-    cfg = dict(DEFAULTS)
+    cfg = deepcopy(DEFAULTS)
     path = find_config(explicit_path)
-    cfg.update(load_file(path))
-    cfg.update(load_env(environ))
+    file_values = load_file(path)
+    env_values = load_env(environ)
+    for values in (file_values, env_values):
+        otsdaq = values.pop("otsdaq", None)
+        cfg.update(values)
+        if otsdaq is not None:
+            cfg["otsdaq"] = _merge_otsdaq(cfg["otsdaq"], otsdaq)
     for key, value in (overrides or {}).items():
         if value is not None and key in DEFAULTS:
-            cfg[key] = value
+            if key == "otsdaq":
+                cfg[key] = _merge_otsdaq(cfg[key], value)
+            else:
+                cfg[key] = value
     cfg["_config_file"] = str(path) if path else None
     return cfg

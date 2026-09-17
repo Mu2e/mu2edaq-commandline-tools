@@ -26,6 +26,7 @@ from typing import Any, Dict
 
 from . import __version__
 from . import config as configmod
+from .otsdaq import commands as otsdaq_commands
 
 Command = namedtuple("Command", "help add_arguments run")
 
@@ -73,6 +74,11 @@ COMMANDS: Dict[str, Command] = {
     "list": Command("list the available tools", None, cmd_list),
     "config": Command("show the effective configuration", _add_config, cmd_config),
     "version": Command("show the package version", None, cmd_version),
+    "otsdaq": Command(
+        "read status and diagnostics from otsdaq",
+        otsdaq_commands.add_arguments,
+        otsdaq_commands.run,
+    ),
 }
 
 

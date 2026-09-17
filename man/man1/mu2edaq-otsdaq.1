@@ -1,0 +1,141 @@
+.TH MU2EDAQ-OTSDAQ 1 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ"
+.SH NAME
+mu2edaq-tools otsdaq \- read status and diagnostics from a running otsdaq instance
+.SH SYNOPSIS
+.B mu2edaq-tools otsdaq
+.I read-command
+.RI [ options ]
+.PP
+.B mu2edaq-tools otsdaq raw
+.I RequestType
+.RI [ options ]
+.SH DESCRIPTION
+The otsdaq command group is a synchronous Python client for the xdaq HTTP
+endpoints observed in the Mu2e otsdaq packages. Modeled commands are
+read-only. They print a terminal-oriented view by default and a stable JSON
+envelope with
+.BR --json .
+.PP
+The JSON envelope contains
+.IR instance ,
+.IR command ,
+.IR timestamp ,
+and
+.IR data .
+With
+.BR --watch ,
+one envelope is emitted per line (NDJSON).
+.SH READ COMMANDS
+.TP
+.B state
+Current run-control state.
+.TP
+.BI "run-info [" RUN_NUMBER ]
+Current run information when omitted or zero, or information for the requested
+run number.
+.TP
+.BR daq-report ", " daq-state
+TFM/artdaq report and process state.
+.TP
+.B macros
+Runtime FE, public, and private macro inventory. This does not execute a macro.
+.TP
+.BR pv-list ", " "pv-read " "PV..." ", " "pv-settings " "PV..."
+List PVs or read values and settings through Slow Controls.
+.TP
+.BR "alarms [" "PV..." "]" ", " alarm-checks
+Read alarm data or the dashboard alarm-check status.
+.TP
+.BI "console [" "--lcount N" ]
+Read console messages. Watch mode carries the returned count into the next
+request when the server supplies one.
+.TP
+.BI "messages [" --history ]
+Read gateway system messages.
+.SH COMMON OPTIONS
+.TP
+.BI "--instance " NAME
+Select a named profile. Otherwise
+.B otsdaq.default_instance
+is required.
+.TP
+.BI "--gateway-url " ORIGIN
+Override the Gateway, Console, and Macro Maker origin.
+.TP
+.BI "--slow-controls-url " ORIGIN
+Override the Slow Controls origin. The default is the gateway port plus one.
+.TP
+.BI "--tfm-url " ORIGIN
+Override the TFM origin. The default is the gateway host on port 3047.
+.TP
+.BI "--timeout " SECONDS
+HTTP timeout. Default: 10 seconds.
+.TP
+.BR --verify-tls ", " --insecure
+Enable or disable server certificate verification. The Phase 1 default is
+insecure and emits a warning on stderr.
+.TP
+.BI "--ca-bundle " FILE
+Use a custom CA bundle and enable verification.
+.TP
+.B --json
+Emit a stable JSON envelope instead of the human view.
+.TP
+.B --watch
+Poll until interrupted or until
+.B --count
+samples have been emitted.
+.TP
+.BI "--interval " SECONDS
+Polling interval. Default: 2 seconds.
+.TP
+.BI "--count " N
+Bound watch mode to N samples.
+.SH RAW REQUESTS
+.B raw
+is an expert escape hatch and is not read-only. It can invoke configuration
+writes, macro execution, or state transitions and therefore warns on every
+invocation. It never repeats automatically.
+.PP
+Options are
+.BR "--service gateway|console|config|slow-controls|tfm|macro" ,
+.BI "--lid " N ,
+.BR "--handler request|state-machine" ,
+repeated
+.BI "--query " KEY=VALUE
+and
+.BI "--form " KEY=VALUE ,
+and
+.B --xml
+for the exact response instead of normalized JSON.
+.SH AUTHENTICATION
+Reads are anonymous unless a CookieCode is supplied through
+.B MU2EDAQ_TOOLS_OTSDAQ_COOKIE
+or a profile's
+.B cookie_file .
+Credential files must be owner-only on POSIX systems. Cookie values are never
+accepted as dedicated command-line options or ordinary YAML values. The
+credential is sent only to LID 281 (Configuration Supervisor).
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+Configuration, transport, HTTP, XML, embedded-JSON, or otsdaq response error.
+.TP
+.B 2
+Invalid arguments.
+.TP
+.B 130
+Watch mode interrupted with Ctrl-C.
+.SH EXAMPLES
+.nf
+mu2edaq-tools otsdaq state --instance crv
+mu2edaq-tools otsdaq pv-read Mu2e:TDAQ_crv:daq08DTC:Temperature --json
+mu2edaq-tools otsdaq daq-state --watch --count 5 --json
+mu2edaq-tools otsdaq raw getAppStatus --service gateway --xml
+.fi
+.SH SEE ALSO
+.BR mu2edaq-tools (1),
+.BR mu2edaq_commandline_tools (3)

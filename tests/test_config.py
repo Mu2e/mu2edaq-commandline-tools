@@ -86,6 +86,53 @@ def test_non_mapping_file_is_rejected(tmp_path):
         configmod.load(str(path), environ={})
 
 
+def test_nested_otsdaq_config_and_environment_precedence(tmp_path):
+    path = tmp_path / "tools.yaml"
+    path.write_text(
+        "otsdaq:\n"
+        "  default_instance: crv\n"
+        "  timeout: 8\n"
+        "  instances:\n"
+        "    crv:\n"
+        "      gateway_url: https://daq.example:8443\n",
+        encoding="utf-8",
+    )
+    cfg = configmod.load(
+        str(path),
+        environ={
+            "MU2EDAQ_TOOLS_OTSDAQ_INSTANCE": "tracker",
+            "MU2EDAQ_TOOLS_OTSDAQ_TIMEOUT": "3.5",
+        },
+    )
+    assert cfg["otsdaq"]["default_instance"] == "tracker"
+    assert cfg["otsdaq"]["timeout"] == 3.5
+    assert cfg["otsdaq"]["instances"]["crv"]["gateway_url"].endswith(":8443")
+
+
+def test_otsdaq_must_be_mapping(tmp_path):
+    path = tmp_path / "tools.yaml"
+    path.write_text("otsdaq: nope\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="otsdaq must be a mapping"):
+        configmod.load(str(path), environ={})
+
+
+@pytest.mark.parametrize(
+    "content,match",
+    [
+        ("otsdaq:\n  instances: nope\n", "otsdaq.instances must be a mapping"),
+        (
+            "otsdaq:\n  instances:\n    crv: nope\n",
+            "otsdaq instance 'crv' must be a mapping",
+        ),
+    ],
+)
+def test_otsdaq_instances_must_be_mappings(tmp_path, content, match):
+    path = tmp_path / "tools.yaml"
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(ValueError, match=match):
+        configmod.load(str(path), environ={})
+
+
 def test_missing_explicit_file_falls_back_to_defaults(tmp_path):
     cfg = configmod.load(str(tmp_path / "nope.yaml"), environ={})
     assert cfg["cluster"] == configmod.DEFAULTS["cluster"]

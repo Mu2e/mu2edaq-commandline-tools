@@ -2,3 +2,4 @@
 # mu2edaq-discovery is deliberately absent: it is not published on PyPI and is
 # installed from the sibling checkout (see ../mu2edaq-install-discovery.sh).
 PyYAML>=6.0
+requests>=2.28

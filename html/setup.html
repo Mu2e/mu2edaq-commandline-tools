@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Install and configure the Mu2e otsdaq command-line client.">
+    <title>Setup · otsdaq CLI Walkthrough</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="setup">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><span class="brand-mark">&gt;_</span><span>Mu2e otsdaq CLI</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav"><span aria-hidden="true">☰</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Overview</a>
+          <a href="setup.html" data-nav="setup">Setup</a>
+          <a href="reads.html" data-nav="reads">Read commands</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="troubleshooting.html" data-nav="troubleshooting">Troubleshooting</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="page-hero-inner">
+          <div class="breadcrumb"><a href="index.html">Overview</a> / Setup</div>
+          <p class="eyebrow">Chapter 01</p>
+          <h1>Install, configure, connect.</h1>
+          <p class="lede">Build the project, define named instances, and choose a secure path to each otsdaq service origin.</p>
+        </div>
+      </section>
+
+      <div class="page-shell">
+        <aside class="toc">
+          <p class="toc-title">On this page</p>
+          <nav>
+            <a href="#prerequisites">Prerequisites</a>
+            <a href="#install">Install</a>
+            <a href="#profiles">Named profiles</a>
+            <a href="#tunnel">SSH tunnel</a>
+            <a href="#tls">TLS</a>
+            <a href="#credentials">Credentials</a>
+            <a href="#verify">Verify setup</a>
+          </nav>
+        </aside>
+
+        <article class="prose">
+          <section id="prerequisites">
+            <p class="eyebrow">Before you begin</p>
+            <h2>Supported, deliberately small requirements.</h2>
+            <ul class="check-list">
+              <li>macOS or AlmaLinux 9</li>
+              <li>Python 3.9 or newer</li>
+              <li>Network access or an SSH tunnel to the target instance</li>
+              <li>CMake 3.16+ and a C++17 compiler only when building the C++ regression targets</li>
+            </ul>
+            <p>The bootstrap installs Requests, PyYAML, and—under <code>--dev</code>—pytest into a local virtual environment.</p>
+          </section>
+
+          <section id="install">
+            <p class="eyebrow">Step 1</p>
+            <h2>Bootstrap from the checkout.</h2>
+            <div class="code-block">
+              <div class="code-label">Python and C++ development install</div>
+              <pre><code>./bootstrap.sh --dev --cpp
+source venv/bin/activate</code></pre>
+            </div>
+            <p>For Python-only operation, omit <code>--cpp</code>.</p>
+            <div class="code-block">
+              <div class="code-label">Confirm the command surface</div>
+              <pre><code>mu2edaq-tools --version
+mu2edaq-tools list
+mu2edaq-tools otsdaq --help</code></pre>
+            </div>
+            <p>Expect version <code>0.2.0</code> or newer and an <code>otsdaq</code> entry in the command list.</p>
+          </section>
+
+          <section id="profiles">
+            <p class="eyebrow">Step 2</p>
+            <h2>Describe each instance once.</h2>
+            <p>Create <code>mu2edaq-commandline-tools.yaml</code> in the current directory, or edit another file in the documented configuration search path.</p>
+            <div class="code-block">
+              <div class="code-label">Minimal profile</div>
+              <pre><code>otsdaq:
+  default_instance: crv
+  timeout: 10.0
+  verify_tls: false
+  ca_bundle: null
+
+  instances:
+    crv:
+      gateway_url: https://localhost:3075</code></pre>
+            </div>
+            <p>One gateway origin defines three routes by default:</p>
+            <table class="command-table">
+              <thead><tr><th>Service</th><th>Derived origin</th><th>LIDs</th></tr></thead>
+              <tbody>
+                <tr><td>Gateway origin</td><td><code>https://localhost:3075</code></td><td>200, 260, 281, 800</td></tr>
+                <tr><td>Slow Controls</td><td>Gateway port + 1: <code>:3076</code></td><td>282</td></tr>
+                <tr><td>TFM</td><td>Gateway host, fixed <code>:3047</code></td><td>302</td></tr>
+              </tbody>
+            </table>
+            <p>When a proxy or tunnel uses different ports, set all origins explicitly:</p>
+            <div class="code-block">
+              <div class="code-label">Explicit service origins</div>
+              <pre><code>otsdaq:
+  default_instance: crv
+  instances:
+    crv:
+      gateway_url: https://localhost:3075
+      slow_controls_url: https://localhost:4076
+      tfm_url: https://localhost:4047</code></pre>
+            </div>
+            <h3>Multiple subsystem profiles</h3>
+            <div class="code-block">
+              <div class="code-label">Named instances</div>
+              <pre><code>otsdaq:
+  default_instance: crv
+  instances:
+    crv:
+      gateway_url: https://localhost:3075
+    tracker:
+      gateway_url: https://localhost:3175
+    calo:
+      gateway_url: https://localhost:3275</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Select a profile</div>
+              <pre><code>mu2edaq-tools otsdaq state --instance tracker</code></pre>
+            </div>
+            <div class="callout">
+              <p><strong>Argument placement:</strong> global <code>--config</code> goes before <code>otsdaq</code>; connection options such as <code>--instance</code> go after the read command.</p>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Explicit configuration file</div>
+              <pre><code>mu2edaq-tools --config /path/to/tools.yaml otsdaq state --instance crv</code></pre>
+            </div>
+          </section>
+
+          <section id="tunnel">
+            <p class="eyebrow">Step 3</p>
+            <h2>Forward the three service origins.</h2>
+            <p>A typical local profile expects Gateway on 3075, Slow Controls on 3076, and TFM on 3047.</p>
+            <div class="code-block">
+              <div class="code-label">Conceptual SSH tunnel</div>
+              <pre><code>ssh \
+  -L 3075:OTSDAQ_HOST:8443 \
+  -L 3076:OTSDAQ_HOST:8444 \
+  -L 3047:OTSDAQ_HOST:3047 \
+  USER@LOGIN_HOST</code></pre>
+            </div>
+            <p>Replace hosts and remote ports with the values for the deployment. Keep the SSH session open while using the CLI.</p>
+          </section>
+
+          <section id="tls">
+            <p class="eyebrow">Step 4</p>
+            <h2>Choose the TLS verification policy.</h2>
+            <p>Phase 1 defaults to disabled verification for DAQ test systems and local tunnels. A warning is written to stderr on each invocation; JSON stdout remains clean.</p>
+            <div class="code-block">
+              <div class="code-label">Enable system trust</div>
+              <pre><code>mu2edaq-tools otsdaq state --verify-tls</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Use a project CA</div>
+              <pre><code>otsdaq:
+  ca_bundle: /path/to/daq-ca-bundle.pem</code></pre>
+            </div>
+            <p>A configured CA bundle automatically enables verification.</p>
+          </section>
+
+          <section id="credentials">
+            <p class="eyebrow">Optional</p>
+            <h2>Keep CookieCode out of configuration.</h2>
+            <p>Modeled reads normally operate anonymously. For Configuration Supervisor access through raw LID 281 calls, supply an existing CookieCode through the environment or an owner-only file.</p>
+            <div class="code-block">
+              <div class="code-label">Environment</div>
+              <pre><code>export MU2EDAQ_TOOLS_OTSDAQ_COOKIE='COOKIE_VALUE'</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Protected file</div>
+              <pre><code>install -m 600 /dev/null ~/.config/mu2edaq/crv-cookie
+printf '%s\n' 'COOKIE_VALUE' &gt; ~/.config/mu2edaq/crv-cookie
+chmod 600 ~/.config/mu2edaq/crv-cookie</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Reference the path only</div>
+              <pre><code>otsdaq:
+  instances:
+    crv:
+      gateway_url: https://localhost:3075
+      cookie_file: ~/.config/mu2edaq/crv-cookie</code></pre>
+            </div>
+            <div class="callout warning">
+              <p><strong>Credential boundary:</strong> the configured cookie is sent only to LID 281. Never place the value in YAML, scripts, command history, logs, or bug reports.</p>
+            </div>
+          </section>
+
+          <section id="verify">
+            <p class="eyebrow">Ready check</p>
+            <h2>Inspect configuration before connecting.</h2>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>mu2edaq-tools config
+mu2edaq-tools config --json
+mu2edaq-tools otsdaq state</code></pre>
+            </div>
+            <p>If state succeeds, continue to the command walkthrough. If not, use the troubleshooting page to check profile selection, ports, tunnels, and TLS.</p>
+          </section>
+
+          <div class="next-page">
+            <div>
+              <strong>Next: read the running system</strong>
+              <p>Move from current state to DAQ, macros, PVs, and messages.</p>
+            </div>
+            <a class="button" href="reads.html">Open read commands →</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Mu2e DAQ · otsdaq Phase 1 walkthrough</p><p>Setup</p></div></footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site.js"></script>
+  </body>
+</html>

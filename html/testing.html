@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Test the Mu2e otsdaq client locally and on supported platforms.">
+    <title>Testing · otsdaq CLI Walkthrough</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="testing">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><span class="brand-mark">&gt;_</span><span>Mu2e otsdaq CLI</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav"><span aria-hidden="true">☰</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Overview</a>
+          <a href="setup.html" data-nav="setup">Setup</a>
+          <a href="reads.html" data-nav="reads">Read commands</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="troubleshooting.html" data-nav="troubleshooting">Troubleshooting</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="page-hero-inner">
+          <div class="breadcrumb"><a href="index.html">Overview</a> / Testing</div>
+          <p class="eyebrow">Chapter 03</p>
+          <h1>Prove the client without touching a DAQ.</h1>
+          <p class="lede">The test harness models three otsdaq origins on local ephemeral ports and validates transport, parsing, CLI behavior, and failures.</p>
+        </div>
+      </section>
+
+      <div class="page-shell">
+        <aside class="toc">
+          <p class="toc-title">On this page</p>
+          <nav>
+            <a href="#harness">Fake otsdaq harness</a>
+            <a href="#python">Python tests</a>
+            <a href="#cpp">C++ regression</a>
+            <a href="#package">Package build</a>
+            <a href="#platforms">Platform checks</a>
+            <a href="#live">Live smoke test</a>
+          </nav>
+        </aside>
+
+        <article class="prose">
+          <section id="harness">
+            <p class="eyebrow">Test architecture</p>
+            <h2>Three origins, one deterministic fixture.</h2>
+            <div class="content-grid">
+              <div class="card"><h3>Gateway group</h3><p>Models Gateway, Console, Configuration, and Macro Maker LIDs at one origin.</p></div>
+              <div class="card"><h3>Slow Controls</h3><p>Uses a separate local origin for PV and alarm JSON-in-XML responses.</p></div>
+              <div class="card"><h3>TFM</h3><p>Uses a separate local origin for artdaq report and state responses.</p></div>
+            </div>
+            <p>The harness records paths, query fields, form bodies, LIDs, credentials, and request order. Scripted response sequences drive watch-mode tests. It never contacts a live otsdaq instance.</p>
+            <div class="callout">
+              <p><strong>Loopback access required.</strong> The tests bind ephemeral <code>127.0.0.1</code> ports. Restricted sandboxes may require explicit loopback-socket permission.</p>
+            </div>
+          </section>
+
+          <section id="python">
+            <p class="eyebrow">Primary suite</p>
+            <h2>Run all Python tests.</h2>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>./bootstrap.sh --dev
+source venv/bin/activate
+pytest -q</code></pre>
+            </div>
+            <p>The current expected result is:</p>
+            <div class="code-block">
+              <div class="code-label">Expected</div>
+              <pre><code>51 passed</code></pre>
+            </div>
+            <h3>Run only the otsdaq tests</h3>
+            <div class="code-block">
+              <div class="code-label">Focused suite</div>
+              <pre><code>pytest -q \
+  tests/test_otsdaq_settings.py \
+  tests/test_otsdaq_client.py \
+  tests/test_otsdaq_cli.py</code></pre>
+            </div>
+            <h3>Inspect one test in detail</h3>
+            <div class="code-block">
+              <div class="code-label">Verbose output</div>
+              <pre><code>pytest -vv -s \
+  tests/test_otsdaq_cli.py::test_state_json_and_watch_ndjson</code></pre>
+            </div>
+            <p>The suite covers:</p>
+            <ul class="check-list">
+              <li>Profile selection, URL derivation, and precedence</li>
+              <li>TLS, CA bundles, protected cookie files, and credential scope</li>
+              <li>Correct service origins, LIDs, queries, and form bodies</li>
+              <li>XML normalization, repeated elements, and embedded JSON</li>
+              <li>FE, public, and private macro inventory parsing</li>
+              <li>HTTP, timeout, malformed XML, missing DATA, and server errors</li>
+              <li>Human output, JSON envelopes, NDJSON, watch counts, and raw XML</li>
+            </ul>
+          </section>
+
+          <section id="cpp">
+            <p class="eyebrow">Regression boundary</p>
+            <h2>Keep the existing C++ surface green.</h2>
+            <p>The otsdaq client is Python-only in Phase 1, but the C++ library and diagnostic executable remain part of the package.</p>
+            <div class="code-block">
+              <div class="code-label">CMake and CTest</div>
+              <pre><code>cmake -S . -B build -DBUILD_TESTING=ON
+cmake --build build
+ctest --test-dir build --output-on-failure</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Expected</div>
+              <pre><code>100% tests passed, 0 tests failed out of 2</code></pre>
+            </div>
+          </section>
+
+          <section id="package">
+            <p class="eyebrow">Distribution check</p>
+            <h2>Confirm the new package ships.</h2>
+            <div class="code-block">
+              <div class="code-label">Build a wheel</div>
+              <pre><code>python3 -m pip wheel \
+  --no-deps \
+  --no-build-isolation \
+  --wheel-dir /tmp/mu2edaq-commandline-tools-wheel \
+  .</code></pre>
+            </div>
+            <p>Expect a wheel named like <code>mu2edaq_commandline_tools-0.2.0-py3-none-any.whl</code>. Its contents must include the <code>mu2edaq_commandline_tools/otsdaq/</code> package.</p>
+          </section>
+
+          <section id="platforms">
+            <p class="eyebrow">Target matrix</p>
+            <h2>Repeat the same workflow on both platforms.</h2>
+            <h3>macOS</h3>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>./bootstrap.sh --dev --cpp
+source venv/bin/activate
+pytest -q
+ctest --test-dir build --output-on-failure</code></pre>
+            </div>
+            <h3>AlmaLinux 9</h3>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>./bootstrap.sh --dev --cpp --python python3
+source venv/bin/activate
+python --version
+pytest -q
+ctest --test-dir build --output-on-failure</code></pre>
+            </div>
+            <p>The implementation uses Python 3.9-compatible syntax. The completed validation used Python 3.9.25 and GCC 11.5 on AlmaLinux 9.</p>
+          </section>
+
+          <section id="live">
+            <p class="eyebrow">After local tests</p>
+            <h2>Perform a bounded live smoke test.</h2>
+            <div class="callout warning">
+              <p><strong>Prefer non-production.</strong> If production is the only target, do not invoke <code>raw</code>. Use only the modeled read commands below.</p>
+            </div>
+            <div class="step">
+              <span class="step-index">1</span>
+              <h3>Verify Gateway</h3>
+              <div class="code-block"><pre><code>mu2edaq-tools otsdaq state --json
+mu2edaq-tools otsdaq run-info --json</code></pre></div>
+            </div>
+            <div class="step">
+              <span class="step-index">2</span>
+              <h3>Verify TFM</h3>
+              <div class="code-block"><pre><code>mu2edaq-tools otsdaq daq-state --json
+mu2edaq-tools otsdaq daq-report --json</code></pre></div>
+            </div>
+            <div class="step">
+              <span class="step-index">3</span>
+              <h3>Verify Macro Maker</h3>
+              <div class="code-block"><pre><code>mu2edaq-tools otsdaq macros --json</code></pre></div>
+            </div>
+            <div class="step">
+              <span class="step-index">4</span>
+              <h3>Verify Slow Controls</h3>
+              <div class="code-block"><pre><code>mu2edaq-tools otsdaq pv-list --json
+mu2edaq-tools otsdaq alarm-checks --json</code></pre></div>
+            </div>
+            <div class="step">
+              <span class="step-index">5</span>
+              <h3>Verify bounded polling</h3>
+              <div class="code-block"><pre><code>mu2edaq-tools otsdaq state \
+  --watch --interval 1 --count 3 --json</code></pre></div>
+            </div>
+          </section>
+
+          <div class="next-page">
+            <div>
+              <strong>Something failed?</strong>
+              <p>Map the symptom to profile, route, TLS, or response parsing.</p>
+            </div>
+            <a class="button" href="troubleshooting.html">Troubleshoot →</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Mu2e DAQ · otsdaq Phase 1 walkthrough</p><p>Testing</p></div></footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site.js"></script>
+  </body>
+</html>

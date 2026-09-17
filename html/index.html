@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walkthrough for the Mu2e Phase 1 otsdaq command-line client.">
+    <title>otsdaq CLI Walkthrough · Mu2e DAQ</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="home">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">&gt;_</span>
+          <span>Mu2e otsdaq CLI</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">
+          <span aria-hidden="true">☰</span>
+          <span class="visually-hidden">Menu</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Overview</a>
+          <a href="setup.html" data-nav="setup">Setup</a>
+          <a href="reads.html" data-nav="reads">Read commands</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="troubleshooting.html" data-nav="troubleshooting">Troubleshooting</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-inner">
+          <div>
+            <p class="eyebrow">Phase 1 · Read-oriented operations</p>
+            <h1>See what otsdaq sees.</h1>
+            <p class="lede">
+              A practical walkthrough for installing, configuring, testing,
+              and using the Mu2e DAQ command-line client—without changing a
+              running system.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="setup.html">Start the walkthrough</a>
+              <a class="button secondary" href="testing.html">Run the test suite</a>
+            </div>
+          </div>
+          <div class="terminal-card" aria-label="Example terminal session">
+            <pre><code><span class="prompt">$</span> mu2edaq-tools otsdaq state
+  state          Running
+  time_in_state  184
+
+<span class="prompt">$</span> mu2edaq-tools otsdaq daq-state --json
+{"instance":"crv","command":"daq-state",...}
+
+<span class="prompt">$</span> mu2edaq-tools otsdaq macros
+TYPE  FE UID     MACRO
+fe    daq08DTC   DTC Read</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-shell" aria-labelledby="path-heading">
+        <div class="toc">
+          <p class="toc-title">At a glance</p>
+          <nav aria-label="On this page">
+            <a href="#path">Walkthrough path</a>
+            <a href="#scope">Phase 1 scope</a>
+            <a href="#quick-start">Quick start</a>
+            <a href="#safety">Safety model</a>
+          </nav>
+        </div>
+
+        <div class="prose">
+          <section id="path">
+            <p class="eyebrow">Four short chapters</p>
+            <h2 id="path-heading">Follow the path from checkout to live reads.</h2>
+            <div class="content-grid">
+              <a class="card link-card" href="setup.html">
+                <span class="card-number">01</span>
+                <h3>Install and connect</h3>
+                <p>Bootstrap Python, create named profiles, and configure tunnels, TLS, and optional credentials.</p>
+                <span class="link-arrow">Open setup →</span>
+              </a>
+              <a class="card link-card" href="reads.html">
+                <span class="card-number">02</span>
+                <h3>Read the system</h3>
+                <p>Walk through run state, DAQ state, live macros, Slow Controls, alarms, and logs.</p>
+                <span class="link-arrow">Explore commands →</span>
+              </a>
+              <a class="card link-card" href="testing.html">
+                <span class="card-number">03</span>
+                <h3>Prove it locally</h3>
+                <p>Use the fake three-origin otsdaq harness, CTest, packaging checks, and a safe live smoke test.</p>
+                <span class="link-arrow">Run tests →</span>
+              </a>
+              <a class="card link-card" href="troubleshooting.html">
+                <span class="card-number">04</span>
+                <h3>Diagnose failures</h3>
+                <p>Resolve profile, tunnel, TLS, XML, credential, macro-list, and response-shape problems.</p>
+                <span class="link-arrow">Troubleshoot →</span>
+              </a>
+            </div>
+          </section>
+
+          <section id="scope">
+            <p class="eyebrow">What Phase 1 does</p>
+            <h2>Typed reads across the running instance.</h2>
+            <div class="content-grid">
+              <div class="card">
+                <h3>Run control</h3>
+                <p>Current state, time in state, and current or historical run information.</p>
+              </div>
+              <div class="card">
+                <h3>artdaq / TFM</h3>
+                <p>DAQ report and process state through the dedicated TFM origin.</p>
+              </div>
+              <div class="card">
+                <h3>Live macros</h3>
+                <p>Runtime macro discovery, including configured ROC forwarding macros—never execution.</p>
+              </div>
+              <div class="card">
+                <h3>Slow Controls</h3>
+                <p>PV list, values, settings, alarm data, and dashboard alarm checks.</p>
+              </div>
+              <div class="card">
+                <h3>Messages</h3>
+                <p>Console output and gateway system messages, with polling and console cursors.</p>
+              </div>
+              <div class="card">
+                <h3>Automation</h3>
+                <p>Stable JSON envelopes and NDJSON streams for shell pipelines and monitoring.</p>
+              </div>
+            </div>
+          </section>
+
+          <section id="quick-start">
+            <p class="eyebrow">The shortest path</p>
+            <h2>From checkout to the first state read.</h2>
+            <div class="step">
+              <span class="step-index">1</span>
+              <h3>Bootstrap the project</h3>
+              <div class="code-block">
+                <div class="code-label">Shell</div>
+                <pre><code>./bootstrap.sh --dev --cpp
+source venv/bin/activate</code></pre>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-index">2</span>
+              <h3>Create a named profile</h3>
+              <div class="code-block">
+                <div class="code-label">mu2edaq-commandline-tools.yaml</div>
+                <pre><code>otsdaq:
+  default_instance: crv
+  instances:
+    crv:
+      gateway_url: https://localhost:3075</code></pre>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-index">3</span>
+              <h3>Read current state</h3>
+              <div class="code-block">
+                <div class="code-label">Shell</div>
+                <pre><code>mu2edaq-tools otsdaq state
+mu2edaq-tools otsdaq state --json</code></pre>
+              </div>
+            </div>
+          </section>
+
+          <section id="safety">
+            <p class="eyebrow">Know the boundary</p>
+            <h2>The named commands are reads. Raw is different.</h2>
+            <div class="callout">
+              <p><strong>Safe starting point.</strong> Commands such as <code>state</code>, <code>daq-state</code>, <code>macros</code>, and <code>pv-read</code> model observed read endpoints and are appropriate for the Phase 1 smoke test.</p>
+            </div>
+            <div class="callout danger">
+              <p><strong>Expert interface.</strong> <code>otsdaq raw</code> can send arbitrary RequestTypes, form values, and state-machine requests. It can execute writes or interrupt a live DAQ. It warns, but it does not block.</p>
+            </div>
+          </section>
+
+          <div class="next-page">
+            <div>
+              <strong>Next: connect to an instance</strong>
+              <p>Install the tools and build a named connection profile.</p>
+            </div>
+            <a class="button" href="setup.html">Go to setup →</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>Mu2e DAQ · otsdaq Phase 1 walkthrough</p>
+        <p>Python 3.9+ · macOS and AlmaLinux</p>
+      </div>
+    </footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site.js"></script>
+  </body>
+</html>

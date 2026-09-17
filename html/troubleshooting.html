@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Troubleshoot profiles, connections, TLS, XML, and responses from the otsdaq CLI.">
+    <title>Troubleshooting · otsdaq CLI Walkthrough</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="troubleshooting">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><span class="brand-mark">&gt;_</span><span>Mu2e otsdaq CLI</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav"><span aria-hidden="true">☰</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Overview</a>
+          <a href="setup.html" data-nav="setup">Setup</a>
+          <a href="reads.html" data-nav="reads">Read commands</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="troubleshooting.html" data-nav="troubleshooting">Troubleshooting</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="page-hero-inner">
+          <div class="breadcrumb"><a href="index.html">Overview</a> / Troubleshooting</div>
+          <p class="eyebrow">Chapter 04</p>
+          <h1>Start with the route that failed.</h1>
+          <p class="lede">A state failure, a DAQ failure, and a PV failure point to different origins. Use that separation to narrow the problem quickly.</p>
+        </div>
+      </section>
+
+      <div class="page-shell">
+        <aside class="toc">
+          <p class="toc-title">On this page</p>
+          <nav>
+            <a href="#triage">Fast triage</a>
+            <a href="#profiles">Profile errors</a>
+            <a href="#connection">Connections</a>
+            <a href="#tls">TLS and credentials</a>
+            <a href="#protocol">XML and protocol</a>
+            <a href="#macros">Macro inventory</a>
+            <a href="#exits">Exit statuses</a>
+            <a href="#boundaries">Phase boundaries</a>
+          </nav>
+        </aside>
+
+        <article class="prose">
+          <section id="triage">
+            <p class="eyebrow">First minute</p>
+            <h2>Identify the service origin.</h2>
+            <table class="command-table">
+              <thead><tr><th>Symptom</th><th>Likely route</th><th>First check</th></tr></thead>
+              <tbody>
+                <tr><td><code>state</code>, <code>run-info</code>, <code>console</code>, or <code>macros</code> fails</td><td>Gateway origin</td><td>Gateway URL, main tunnel, and target instance</td></tr>
+                <tr><td><code>daq-state</code> or <code>daq-report</code> fails</td><td>TFM origin</td><td>Port 3047 or explicit <code>tfm_url</code></td></tr>
+                <tr><td>PV or alarm command fails</td><td>Slow Controls origin</td><td>Gateway port + 1 or explicit <code>slow_controls_url</code></td></tr>
+                <tr><td>Only one named subsystem fails</td><td>Selected profile</td><td><code>--instance</code>, profile URL, and subsystem tunnel</td></tr>
+              </tbody>
+            </table>
+            <div class="code-block">
+              <div class="code-label">Inspect effective configuration</div>
+              <pre><code>mu2edaq-tools config
+mu2edaq-tools config --json</code></pre>
+            </div>
+          </section>
+
+          <section id="profiles">
+            <p class="eyebrow">Before HTTP</p>
+            <h2>Resolve selection and schema errors.</h2>
+            <h3>No instance selected</h3>
+            <div class="code-block"><pre><code>no otsdaq instance selected; set otsdaq.default_instance or use --instance</code></pre></div>
+            <p>Set <code>otsdaq.default_instance</code>, pass <code>--instance NAME</code>, or provide a one-off <code>--gateway-url</code>.</p>
+            <h3>Unknown instance</h3>
+            <p>Confirm the selected name appears under <code>otsdaq.instances</code>. Environment variable <code>MU2EDAQ_TOOLS_OTSDAQ_INSTANCE</code> can silently override the YAML default.</p>
+            <h3>Origin rejected</h3>
+            <p>Origins must use <code>http</code> or <code>https</code>, must contain a hostname, and must not contain credentials, paths, query strings, or fragments.</p>
+            <div class="code-block">
+              <div class="code-label">Valid</div>
+              <pre><code>gateway_url: https://localhost:3075</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Invalid</div>
+              <pre><code>gateway_url: https://user:pass@host:3075/path?mode=test</code></pre>
+            </div>
+          </section>
+
+          <section id="connection">
+            <p class="eyebrow">Network path</p>
+            <h2>Separate refusal, timeout, and HTTP errors.</h2>
+            <h3>Connection refused</h3>
+            <ul>
+              <li>Confirm the otsdaq instance is running.</li>
+              <li>Confirm the SSH session is still open.</li>
+              <li>Confirm the local port matches the profile.</li>
+              <li>Confirm the remote host and port in each forwarding rule.</li>
+            </ul>
+            <h3>Timeout</h3>
+            <p>Verify firewalls and routing, then increase the request timeout only if the endpoint is known to be slow.</p>
+            <div class="code-block"><pre><code>mu2edaq-tools otsdaq state --timeout 20</code></pre></div>
+            <h3>HTTP 404</h3>
+            <p>The profile may point at a normal web server or proxy path rather than the xdaq origin. The client itself appends <code>/urn:xdaq-application:lid=...</code>; do not include that path in the configured origin.</p>
+            <h3>Make every origin explicit</h3>
+            <div class="code-block">
+              <div class="code-label">Diagnostic invocation</div>
+              <pre><code>mu2edaq-tools otsdaq state \
+  --gateway-url https://localhost:3075 \
+  --slow-controls-url https://localhost:3076 \
+  --tfm-url https://localhost:3047</code></pre>
+            </div>
+          </section>
+
+          <section id="tls">
+            <p class="eyebrow">Trust and authentication</p>
+            <h2>Prefer a CA bundle over insecure mode.</h2>
+            <h3>Certificate verification failure</h3>
+            <div class="code-block"><pre><code>mu2edaq-tools otsdaq state --ca-bundle /path/to/daq-ca.pem</code></pre></div>
+            <p>Use <code>--insecure</code> only when the target and complete network path are understood.</p>
+            <h3>Cookie file rejected</h3>
+            <div class="code-block"><pre><code>chmod 600 ~/.config/mu2edaq/crv-cookie</code></pre></div>
+            <p>The file must be owner-only on POSIX platforms and contain a non-empty value. The configured credential goes only to Configuration Supervisor LID 281.</p>
+            <div class="callout warning">
+              <p><strong>Do not debug by printing secrets.</strong> Remove CookieCode, host-sensitive data, and operational payloads before sharing logs or responses.</p>
+            </div>
+          </section>
+
+          <section id="protocol">
+            <p class="eyebrow">Response shape</p>
+            <h2>HTML is not otsdaq XML.</h2>
+            <h3>Invalid XML</h3>
+            <p>The server may have returned an HTML login page, a proxy error, or a response from an unexpected application. Check the origin and authentication path.</p>
+            <h3>Missing ROOT or DATA</h3>
+            <p>Typed reads require the observed <code>&lt;ROOT&gt;/&lt;DATA&gt;</code> response. A different otsdaq version or endpoint may use another shape.</p>
+            <h3>Invalid embedded JSON</h3>
+            <p>Slow Controls and parts of DAQ state place JSON inside XML attributes. This error means the outer XML parsed but the embedded field did not.</p>
+            <div class="callout danger">
+              <p><strong>Capture carefully.</strong> Exact XML requires <code>raw</code>, which is unrestricted. Use it only with a reviewed read RequestType and remove sensitive values before sharing.</p>
+            </div>
+            <div class="code-block"><pre><code>mu2edaq-tools otsdaq raw READ_REQUEST_TYPE --lid LID --xml</code></pre></div>
+          </section>
+
+          <section id="macros">
+            <p class="eyebrow">Runtime configuration</p>
+            <h2>An empty macro list may be correct.</h2>
+            <p>Macro Maker reports the live FE configuration. Before Configure, or when no FE interfaces are active, the inventory can be empty. After Configure, DTC interfaces may add forwarding macros for their configured ROCs.</p>
+            <ul class="check-list">
+              <li>Confirm <code>state</code> works first.</li>
+              <li>Confirm the state machine has been configured.</li>
+              <li>Confirm the selected subsystem profile is the intended instance.</li>
+              <li>Compare again after configuration changes.</li>
+            </ul>
+          </section>
+
+          <section id="exits">
+            <p class="eyebrow">Automation contract</p>
+            <h2>Use exit status, not text matching.</h2>
+            <table class="status-table">
+              <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>Success</td></tr>
+                <tr><td>1</td><td>Configuration, transport, HTTP, XML, JSON, or otsdaq response failure</td></tr>
+                <tr><td>2</td><td>Invalid or missing arguments</td></tr>
+                <tr><td>130</td><td>Watch mode interrupted with Ctrl-C</td></tr>
+              </tbody>
+            </table>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>if mu2edaq-tools otsdaq state --json &gt; state.json; then
+  echo "state read succeeded"
+else
+  echo "state read failed" &gt;&amp;2
+fi</code></pre>
+            </div>
+          </section>
+
+          <section id="boundaries">
+            <p class="eyebrow">Stop conditions</p>
+            <h2>These operations are outside Phase 1.</h2>
+            <div class="content-grid">
+              <div class="card"><h3>Control</h3><p>FE-macro execution and run-control transitions.</p></div>
+              <div class="card"><h3>Writes</h3><p>Configuration save/activate operations and PV writes.</p></div>
+              <div class="card"><h3>Lifecycle</h3><p>Supervisor restarts and automated login.</p></div>
+              <div class="card"><h3>Host-local</h3><p>Firmware scripts, setup scripts, and standalone hardware test binaries.</p></div>
+            </div>
+            <div class="callout danger">
+              <p><strong>Raw can cross every boundary above.</strong> A terminal warning does not make an arbitrary request safe. Review the RequestType, LID, target instance, and parameters before use.</p>
+            </div>
+          </section>
+
+          <div class="next-page">
+            <div>
+              <strong>Return to the beginning</strong>
+              <p>Review the path or restart with a clean named profile.</p>
+            </div>
+            <a class="button" href="index.html">Back to overview →</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Mu2e DAQ · otsdaq Phase 1 walkthrough</p><p>Troubleshooting</p></div></footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site.js"></script>
+  </body>
+</html>

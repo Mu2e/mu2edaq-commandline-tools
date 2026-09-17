@@ -23,3 +23,28 @@ log_dir: logs
 
 # Colored terminal output.
 color: true
+
+# Read-only otsdaq client settings. The selected instance can be overridden
+# with MU2EDAQ_TOOLS_OTSDAQ_INSTANCE or --instance.
+otsdaq:
+  default_instance: null
+  timeout: 10.0
+
+  # Phase 1 defaults to insecure TLS for DAQ-network compatibility. Every
+  # invocation warns on stderr until verification is enabled.
+  verify_tls: false
+  ca_bundle: null
+
+  instances:
+    # Example:
+    # crv:
+    #   gateway_url: https://localhost:3075
+    #
+    # Optional service origins override the defaults derived from gateway_url:
+    # Slow Controls uses the gateway port + 1; TFM uses port 3047.
+    #   slow_controls_url: https://localhost:3076
+    #   tfm_url: https://localhost:3047
+    #
+    # Store only a path here, never the CookieCode itself. On POSIX the file
+    # must be owner-only (chmod 600). MU2EDAQ_TOOLS_OTSDAQ_COOKIE overrides it.
+    #   cookie_file: ~/.config/mu2edaq/crv-cookie

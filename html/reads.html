@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Walk through every Phase 1 otsdaq read command.">
+    <title>Read Commands · otsdaq CLI Walkthrough</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="reads">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html"><span class="brand-mark">&gt;_</span><span>Mu2e otsdaq CLI</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav"><span aria-hidden="true">☰</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="index.html" data-nav="home">Overview</a>
+          <a href="setup.html" data-nav="setup">Setup</a>
+          <a href="reads.html" data-nav="reads">Read commands</a>
+          <a href="testing.html" data-nav="testing">Testing</a>
+          <a href="troubleshooting.html" data-nav="troubleshooting">Troubleshooting</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="page-hero-inner">
+          <div class="breadcrumb"><a href="index.html">Overview</a> / Read commands</div>
+          <p class="eyebrow">Chapter 02</p>
+          <h1>Walk the running system.</h1>
+          <p class="lede">Start at run control, move through artdaq and hardware discovery, then inspect Slow Controls and operational messages.</p>
+        </div>
+      </section>
+
+      <div class="page-shell">
+        <aside class="toc">
+          <p class="toc-title">On this page</p>
+          <nav>
+            <a href="#smoke">Smoke-test sequence</a>
+            <a href="#run">Run control</a>
+            <a href="#daq">DAQ state</a>
+            <a href="#macros">Live macros</a>
+            <a href="#slow-controls">Slow Controls</a>
+            <a href="#messages">Messages</a>
+            <a href="#watch">Watch and JSON</a>
+            <a href="#raw">Raw requests</a>
+          </nav>
+        </aside>
+
+        <article class="prose">
+          <section id="smoke">
+            <p class="eyebrow">Production-safe path</p>
+            <h2>Use modeled reads in this order.</h2>
+            <p>Prefer a development instance. If production is the only available target, this sequence stays within the modeled Phase 1 read surface.</p>
+            <div class="content-grid">
+              <div class="card"><span class="card-number">1</span><h3>State</h3><p>Confirm Gateway connectivity and current run-control state.</p></div>
+              <div class="card"><span class="card-number">2</span><h3>DAQ</h3><p>Confirm the separate TFM origin and process-state parsing.</p></div>
+              <div class="card"><span class="card-number">3</span><h3>Macros</h3><p>Verify live Macro Maker discovery without executing anything.</p></div>
+              <div class="card"><span class="card-number">4</span><h3>PVs</h3><p>Confirm the separate Slow Controls origin with a list or known PV.</p></div>
+              <div class="card"><span class="card-number">5</span><h3>Messages</h3><p>Read console and system messages last.</p></div>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Safe smoke test</div>
+              <pre><code>mu2edaq-tools otsdaq state
+mu2edaq-tools otsdaq run-info
+mu2edaq-tools otsdaq daq-state
+mu2edaq-tools otsdaq macros
+mu2edaq-tools otsdaq pv-list
+mu2edaq-tools otsdaq console</code></pre>
+            </div>
+          </section>
+
+          <section id="run">
+            <p class="eyebrow">Gateway · LID 200</p>
+            <h2>Read run-control state and run information.</h2>
+            <h3>Current state</h3>
+            <div class="code-block">
+              <div class="code-label">Human and JSON output</div>
+              <pre><code>mu2edaq-tools otsdaq state
+mu2edaq-tools otsdaq state --json</code></pre>
+            </div>
+            <p>Human output is concise. JSON wraps the server fields in a stable envelope with <code>instance</code>, <code>command</code>, <code>timestamp</code>, and <code>data</code>.</p>
+            <div class="code-block">
+              <div class="code-label">Representative JSON envelope</div>
+              <pre><code>{
+  "command": "state",
+  "data": {
+    "state": "Running",
+    "time_in_state": "184"
+  },
+  "instance": "crv",
+  "timestamp": "2026-07-27T20:00:00+00:00"
+}</code></pre>
+            </div>
+            <h3>Run information</h3>
+            <div class="code-block">
+              <div class="code-label">Current and historical runs</div>
+              <pre><code>mu2edaq-tools otsdaq run-info
+mu2edaq-tools otsdaq run-info 105504 --json</code></pre>
+            </div>
+            <p>No run number—or zero—asks for the current run. A positive number requests a historical run.</p>
+          </section>
+
+          <section id="daq">
+            <p class="eyebrow">TFM · LID 302</p>
+            <h2>Inspect artdaq reporting and process state.</h2>
+            <table class="command-table">
+              <thead><tr><th>Command</th><th>Use</th></tr></thead>
+              <tbody>
+                <tr><td><code>daq-report</code></td><td>Read the general DAQ report produced by TFM.</td></tr>
+                <tr><td><code>daq-state</code></td><td>Read connection state and per-process artdaq state, decoding embedded JSON fields.</td></tr>
+              </tbody>
+            </table>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>mu2edaq-tools otsdaq daq-report
+mu2edaq-tools otsdaq daq-state
+mu2edaq-tools otsdaq daq-state --json</code></pre>
+            </div>
+            <div class="callout">
+              <p><strong>Routing clue:</strong> state may work while DAQ calls fail if the Gateway tunnel is open but port 3047 is not forwarded. Configure <code>tfm_url</code> explicitly when necessary.</p>
+            </div>
+          </section>
+
+          <section id="macros">
+            <p class="eyebrow">Macro Maker · LID 800</p>
+            <h2>Discover what is callable—without calling it.</h2>
+            <div class="code-block">
+              <div class="code-label">Live inventory</div>
+              <pre><code>mu2edaq-tools otsdaq macros
+mu2edaq-tools otsdaq macros --json</code></pre>
+            </div>
+            <p>The response includes FE, public, and private macros with permissions, exact input names, and output names. The human view groups those fields into a table.</p>
+            <div class="callout">
+              <p><strong>Runtime is authoritative.</strong> DTC interfaces can add forwarding macros for configured child ROCs. The result can be larger than the static 184-macro source inventory and can change after Configure.</p>
+            </div>
+            <div class="callout warning">
+              <p><strong>Discovery only.</strong> The <code>macros</code> command never invokes <code>runFEMacro</code>. Macro execution is outside the Phase 1 typed interface.</p>
+            </div>
+          </section>
+
+          <section id="slow-controls">
+            <p class="eyebrow">Slow Controls · LID 282</p>
+            <h2>List, inspect, and monitor PVs and alarms.</h2>
+            <h3>Find PV names</h3>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>mu2edaq-tools otsdaq pv-list</code></pre>
+            </div>
+            <h3>Read one or more values</h3>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>mu2edaq-tools otsdaq pv-read \
+  Mu2e:TDAQ_crv:daq08DTC:Temperature \
+  Mu2e:TDAQ_crv:daq08DTC:Voltage</code></pre>
+            </div>
+            <h3>Read metadata and settings</h3>
+            <div class="code-block">
+              <div class="code-label">Shell</div>
+              <pre><code>mu2edaq-tools otsdaq pv-settings \
+  Mu2e:TDAQ_crv:daq08DTC:Temperature</code></pre>
+            </div>
+            <h3>Read alarms</h3>
+            <div class="code-block">
+              <div class="code-label">All, selected, and dashboard checks</div>
+              <pre><code>mu2edaq-tools otsdaq alarms
+mu2edaq-tools otsdaq alarms Mu2e:TDAQ_crv:daq08DTC:Temperature
+mu2edaq-tools otsdaq alarm-checks</code></pre>
+            </div>
+            <div class="callout">
+              <p><strong>Routing clue:</strong> Slow Controls defaults to the Gateway port plus one. If Gateway calls work but PV calls fail, inspect <code>slow_controls_url</code> and its tunnel.</p>
+            </div>
+          </section>
+
+          <section id="messages">
+            <p class="eyebrow">Console · Gateway</p>
+            <h2>Read operational messages.</h2>
+            <div class="code-block">
+              <div class="code-label">Console messages</div>
+              <pre><code>mu2edaq-tools otsdaq console
+mu2edaq-tools otsdaq console --lcount 100
+mu2edaq-tools otsdaq console --watch --interval 1</code></pre>
+            </div>
+            <p>Console watch mode carries a returned count into the next request. When the server does not supply a recognized cursor, the client advances from the number of returned messages.</p>
+            <div class="code-block">
+              <div class="code-label">Gateway system messages</div>
+              <pre><code>mu2edaq-tools otsdaq messages
+mu2edaq-tools otsdaq messages --history</code></pre>
+            </div>
+          </section>
+
+          <section id="watch">
+            <p class="eyebrow">Automation</p>
+            <h2>Poll for people or stream for scripts.</h2>
+            <p>Every modeled read command accepts <code>--watch</code>, <code>--interval</code>, and <code>--count</code>. Without a count, Ctrl-C stops the loop with status 130.</p>
+            <div class="code-block">
+              <div class="code-label">Human watch</div>
+              <pre><code>mu2edaq-tools otsdaq state --watch --interval 1
+mu2edaq-tools otsdaq pv-read PV_NAME --watch --interval 5</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">Bounded NDJSON stream</div>
+              <pre><code>mu2edaq-tools otsdaq daq-state \
+  --watch \
+  --interval 2 \
+  --count 5 \
+  --json &gt; daq-state.ndjson</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">jq examples</div>
+              <pre><code>mu2edaq-tools otsdaq state --json | jq '.data'
+
+mu2edaq-tools otsdaq state --watch --json |
+  jq --unbuffered '.timestamp, .data'</code></pre>
+            </div>
+          </section>
+
+          <section id="raw">
+            <p class="eyebrow">Expert escape hatch</p>
+            <h2>Raw requests are not read-only.</h2>
+            <div class="callout danger">
+              <p><strong>Write-level risk.</strong> Raw accepts arbitrary LIDs, RequestTypes, handlers, query parameters, and form fields. It can execute macros, write configuration, restart supervisors, or drive state transitions. The warning is informational, not a guard.</p>
+            </div>
+            <p>Use raw only after reviewing the RequestType. It does not support watch mode.</p>
+            <div class="code-block">
+              <div class="code-label">Read-oriented example</div>
+              <pre><code>mu2edaq-tools otsdaq raw getAppStatus --service gateway
+mu2edaq-tools otsdaq raw getAppStatus --service gateway --xml</code></pre>
+            </div>
+            <div class="code-block">
+              <div class="code-label">General shape</div>
+              <pre><code>mu2edaq-tools otsdaq raw SomeRequest \
+  --lid 200 \
+  --query name=value \
+  --form option=value</code></pre>
+            </div>
+            <p>Normalized JSON is the default. <code>--xml</code> writes the exact server response body.</p>
+          </section>
+
+          <div class="next-page">
+            <div>
+              <strong>Next: test without a DAQ</strong>
+              <p>Exercise every origin and parser with the local fake-server harness.</p>
+            </div>
+            <a class="button" href="testing.html">Open testing →</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-footer"><div class="footer-inner"><p>Mu2e DAQ · otsdaq Phase 1 walkthrough</p><p>Read commands</p></div></footer>
+    <div class="toast" role="status" aria-live="polite"></div>
+    <script src="site.js"></script>
+  </body>
+</html>

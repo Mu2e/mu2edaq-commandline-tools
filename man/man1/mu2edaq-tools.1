@@ -1,4 +1,4 @@
-.TH MU2EDAQ-TOOLS 1 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ"
+.TH MU2EDAQ-TOOLS 1 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ"
 .SH NAME
 mu2edaq-tools \- command line utilities for the Mu2e DAQ suite
 .SH SYNOPSIS
@@ -35,6 +35,11 @@ members, suitable for scripting.
 .TP
 .B version
 Print the package version.
+.TP
+.B otsdaq
+Read state, run information, DAQ status, live macro inventory, Slow Controls,
+alarms, and logs from a running otsdaq instance. See
+.BR mu2edaq-otsdaq (1).
 .SH GLOBAL OPTIONS
 .TP
 .BR \-c ", " \-\-config " \fIFILE\fR"
@@ -77,6 +82,13 @@ is not given.
 MU2EDAQ_TOOLS_LOG_LEVEL ", " MU2EDAQ_TOOLS_LOG_DIR ", " MU2EDAQ_TOOLS_COLOR
 Override the corresponding config file key. Command line options win over
 these.
+.TP
+.BR MU2EDAQ_TOOLS_OTSDAQ_INSTANCE ", " MU2EDAQ_TOOLS_OTSDAQ_GATEWAY_URL ", " \
+MU2EDAQ_TOOLS_OTSDAQ_SLOW_CONTROLS_URL ", " MU2EDAQ_TOOLS_OTSDAQ_TFM_URL
+Select and override the otsdaq connection.
+.TP
+.BR MU2EDAQ_TOOLS_OTSDAQ_COOKIE ", " MU2EDAQ_TOOLS_OTSDAQ_COOKIE_FILE
+Supply an optional otsdaq CookieCode directly or through an owner-only file.
 .SH FILES
 Searched in order; the first one that exists is used:
 .PP
@@ -118,6 +130,7 @@ mu2edaq\-tools \-\-cluster mu2edaq\-test config \-\-json
 .RE
 .SH SEE ALSO
 .BR mu2edaq-tools-info (1),
+.BR mu2edaq-otsdaq (1),
 .BR mu2edaq-commandline-tools-bootstrap (1),
 .BR mu2edaq_cli_core (3),
 .BR mu2edaq_commandline_tools (3)

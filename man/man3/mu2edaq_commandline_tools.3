@@ -1,4 +1,4 @@
-.TH MU2EDAQ_COMMANDLINE_TOOLS 3 "2026-07-27" "mu2edaq-commandline-tools 0.1.0" "Mu2e DAQ Python API"
+.TH MU2EDAQ_COMMANDLINE_TOOLS 3 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Python API"
 .SH NAME
 mu2edaq_commandline_tools \- Python API for the Mu2e DAQ command line tools
 .SH SYNOPSIS
@@ -14,6 +14,11 @@ mu2edaq_commandline_tools \- Python API for the Mu2e DAQ command line tools
 .PP
 .BI "cli.main(" "argv=None" ") -> int"
 .BI "cli.COMMANDS" "  # dict of name -> Command(help, add_arguments, run)"
+.PP
+.B from mu2edaq_commandline_tools.otsdaq import OtsdaqClient, resolve_instance
+.PP
+.BI "resolve_instance(" "cfg, **overrides" ") -> InstanceConfig"
+.BI "OtsdaqClient(" "instance" ")"
 .fi
 .SH DESCRIPTION
 .SS Configuration
@@ -84,6 +89,20 @@ The tool then appears in
 .BR "mu2edaq-tools list" ,
 gets the global options and config resolution for free, and needs no changes
 to the dispatcher.
+.SS otsdaq
+.B resolve_instance()
+selects a named
+.B otsdaq.instances
+profile, applies environment and command-line overrides, validates its origins
+and credentials, and derives the Slow Controls and TFM origins when omitted.
+.PP
+.B OtsdaqClient
+provides synchronous typed reads for current state, run info, DAQ report/state,
+runtime macro inventory, PV data/settings, alarms, and console/system messages.
+Its
+.B request()
+method retains both exact XML and a normalized representation and is not
+restricted to read-only RequestTypes.
 .SH EXAMPLE
 .nf
 .RS
@@ -95,6 +114,7 @@ print(cfg["cluster"], "from", cfg["_config_file"] or "defaults")
 .fi
 .SH SEE ALSO
 .BR mu2edaq-tools (1),
+.BR mu2edaq-otsdaq (1),
 .BR mu2edaq_cli_core (3)
 .SH AUTHOR
 Andrew Norman, Mu2e DAQ group.
