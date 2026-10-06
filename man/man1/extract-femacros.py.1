@@ -1,0 +1,141 @@
+.TH EXTRACT-FEMACROS.PY 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
+.SH NAME
+extract\-femacros.py \- build the otsdaq FE macro inventory from source
+.SH SYNOPSIS
+.B tools/extract\-femacros.py
+.RB [ \-r
+.IR DIR ]
+.RB [ \-o
+.IR FILE | \- ]
+.RB [ \-p
+.IR GLOB ]
+.RB [ \-q ]
+.SH DESCRIPTION
+Scans every
+.B registerFEMacroFunction(
+call in files ending
+.IR .cc ,
+.IR .h ,
+.I .hh
+or
+.I .cpp
+under the checkouts matching
+.I GLOB
+and writes a JSON inventory of the FE macros they register: name, handler,
+input and output argument names, permission, allowed callers and description,
+with the source file and line of each call.
+.PP
+Calls span many lines and are interleaved with comments, so the scanner
+matches parentheses rather than lines.
+A call inside a
+.B /* */
+block, or on a line containing
+.B //
+before it, is recorded with
+.BR "active: false" .
+Calls in files whose name contains
+.B otsdaq_import_tracker_test_stand
+emit registration source rather than register anything; they are recorded with
+.B "generator: true"
+and left out of the summary's totals.
+.PP
+This is a repository-maintenance tool and is not installed.
+Run it after updating the otsdaq submodules to refresh
+.IR data/otsdaq\-femacros.json ,
+which backs
+.IR doc/otsdaq\-command\-surface.md .
+.PP
+The result is what the source registers, not what a live system exposes: the
+DTC front end re-registers its child ROCs' macros at configure time.
+.B "mu2edaq\-tools otsdaq macros"
+reads the live list.
+.SH OPTIONS
+.TP
+.BR \-r ", " \-\-root " \fIDIR\fR"
+Directory holding the checkouts.
+Default: two levels above
+.IR tools/ ,
+which for a submodule checkout is the
+.B mu2edaq\-main
+superproject.
+.TP
+.BR \-o ", " \-\-output " \fIFILE\fR"
+Output file; parent directories are created.
+Default:
+.I data/otsdaq\-femacros.json
+in this checkout.
+.B \-
+writes the JSON to standard output.
+.TP
+.BR \-p ", " \-\-pattern " \fIGLOB\fR"
+Checkout glob under
+.IR DIR .
+Default:
+.BR otsdaq\-mu2e* .
+.TP
+.BR \-q ", " \-\-quiet
+Do not print the "wrote" line or the summary.
+Without
+.BR \-q ,
+the summary is printed to standard output even with
+.BR "\-o \-" ,
+after the JSON.
+.TP
+.BR \-h ", " \-\-help
+Show help and exit.
+.SH OUTPUT
+A JSON array, one object per call:
+.PP
+.RS
+.nf
+package, file, line   where it was found
+active                false if commented out
+generator             true if the file only emits registration source
+name                  the macro name as callers must spell it
+handler               the C++ method it dispatches to
+inputs, outputs       argument names, exactly as registered
+permission            requiredUserPermissions, as source text
+callers               allowedCallingFEs
+description           the help text, when one was given
+.fi
+.RE
+.SH FILES
+.TP
+.I data/otsdaq\-femacros.json
+Default output, tracked in git.
+.TP
+.I doc/otsdaq\-command\-surface.md
+The survey this inventory supports.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+.I DIR
+does not exist or contains nothing matching
+.IR GLOB .
+.TP
+.B 2
+Invalid command line.
+.SH EXAMPLES
+Refresh the tracked inventory and print the summary:
+.PP
+.RS
+.nf
+\&./tools/extract\-femacros.py
+.fi
+.RE
+.PP
+Inspect without writing anything:
+.PP
+.RS
+.nf
+\&./tools/extract\-femacros.py \-o \- \-q | jq '.[] | select(.active) | .name'
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq\-tools (1),
+.BR mu2edaq\-otsdaq (1)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

@@ -1,0 +1,134 @@
+.TH BOOTSTRAP.SH 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
+.SH NAME
+bootstrap.sh \- set up the mu2edaq-commandline-tools venv and CMake build
+.SH SYNOPSIS
+.B ./bootstrap.sh
+.RB [ \-\-dev ]
+.RB [ \-\-cpp ]
+.RB [ \-\-clean ]
+.RB [ \-\-python
+.IR PATH ]
+.br
+.B ./bootstrap.sh
+.BR \-\-version | \-h
+.SH DESCRIPTION
+Creates
+.I venv/
+in the checkout if it does not exist, upgrades pip, setuptools and wheel, and
+installs mu2edaq-commandline-tools into it with
+.BR "pip install \-\-editable" ,
+so the checkout is what runs.
+Safe to re-run; it is also the dependency-refresh command, and
+.BR start\-mu2edaq\-commandline\-tools.sh (1)
+calls it on every start unless given
+.BR \-\-no\-update .
+.PP
+Because the install is editable, the Python tools always find the tracked
+.I config/mu2edaq\-commandline\-tools.yaml
+of this checkout on their search path; see
+.BR mu2edaq\-tools (1),
+section FILES.
+.PP
+With
+.B \-\-cpp
+it also configures and builds the CMake targets
+.RB ( mu2edaq_cli_core ,
+.BR mu2edaq\-tools\-info ,
+and the
+.B test_cli_core
+test driver) under
+.I build/
+with
+.BR CMAKE_BUILD_TYPE=RelWithDebInfo .
+It does not run
+.BR "cmake \-\-install" .
+.SH OPTIONS
+.TP
+.B \-\-dev
+Install the
+.I dev
+extra (pytest) as well.
+.TP
+.B \-\-cpp
+Configure and build the C++ library and tool.
+.TP
+.B \-\-clean
+Remove
+.I venv/
+and
+.I build/
+first.
+.TP
+.BI \-\-python " PATH"
+Interpreter used to create the venv.
+Default:
+.BR $PYTHON ,
+else
+.BR python3 .
+Python 3.9 or newer is required.
+.TP
+.B \-\-version
+Print
+.B mu2edaq\-commandline\-tools
+.I version
+(read from
+.IR src/mu2edaq_commandline_tools/__init__.py )
+and exit.
+.TP
+.BR \-h ", " \-\-help
+Print the script's header comment and exit.
+.SH FILES
+.TP
+.I venv/
+The virtual environment.
+.TP
+.I build/
+CMake build tree
+.RB ( \-\-cpp ).
+.SH ENVIRONMENT
+.TP
+.B PYTHON
+Default interpreter; overridden by
+.BR \-\-python .
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+No usable Python 3.9+, no
+.B cmake
+with
+.BR \-\-cpp ,
+.B \-\-python
+without an argument, or any failing pip or CMake step
+.RB ( "set \-e" ).
+.TP
+.B 2
+Unknown option.
+.SH EXAMPLES
+Development setup with tests and the C++ build:
+.PP
+.RS
+.nf
+\&./bootstrap.sh \-\-dev \-\-cpp
+source venv/bin/activate
+pytest
+ctest \-\-test\-dir build \-\-output\-on\-failure
+.fi
+.RE
+.PP
+Rebuild from scratch with a specific interpreter:
+.PP
+.RS
+.nf
+\&./bootstrap.sh \-\-clean \-\-python /usr/bin/python3.9
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq\-tools (1),
+.BR mu2edaq\-tools\-info (1),
+.BR start\-mu2edaq\-commandline\-tools.sh (1),
+.BR stop\-mu2edaq\-commandline\-tools.sh (1)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

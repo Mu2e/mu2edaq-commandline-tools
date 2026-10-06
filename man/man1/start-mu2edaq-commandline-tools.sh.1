@@ -1,0 +1,93 @@
+.TH START-MU2EDAQ-COMMANDLINE-TOOLS.SH 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
+.SH NAME
+start\-mu2edaq\-commandline\-tools.sh \- refresh the venv and run mu2edaq\-tools
+.SH SYNOPSIS
+.B ./start\-mu2edaq\-commandline\-tools.sh
+.RB [ \-\-no\-update ]
+.RI [ tool\-arguments ...]
+.br
+.B ./start\-mu2edaq\-commandline\-tools.sh
+.BR \-h | \-\-help
+.SH DESCRIPTION
+Runs
+.B bootstrap.sh
+when
+.I venv/
+does not exist; otherwise runs it again with its output discarded to refresh
+dependencies (this needs network access to the package index).
+It then writes its own PID to the pidfile and
+.BR exec s
+.B venv/bin/python \-m mu2edaq_commandline_tools.cli
+with the remaining arguments, so
+.PP
+.RS
+.nf
+\&./start\-mu2edaq\-commandline\-tools.sh config \-\-json
+.fi
+.RE
+.PP
+is
+.B mu2edaq\-tools config \-\-json
+inside the venv, without activating it.
+.PP
+.B bootstrap.sh
+is called without
+.B \-\-dev
+or
+.BR \-\-cpp .
+.SH OPTIONS
+Both options are recognised only as the first argument; anything after them
+belongs to
+.BR mu2edaq\-tools (1).
+.TP
+.B \-\-no\-update
+Skip the dependency refresh.
+Use on nodes without network access.
+.TP
+.BR \-h ", " \-\-help
+Print the script's header comment and exit.
+.SH FILES
+.TP
+.I .mu2edaq\-tools.pid
+Pidfile in the checkout, unless
+.B MU2EDAQ_TOOLS_PIDFILE
+is set.
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_PIDFILE
+Pidfile location.
+.PP
+All
+.B MU2EDAQ_TOOLS_*
+configuration variables pass through to the tool; see
+.BR mu2edaq\-tools (1).
+.SH EXIT STATUS
+The exit status of
+.BR mu2edaq\-tools ,
+or non-zero if
+.B bootstrap.sh
+fails.
+.SH BUGS
+The script installs
+.B trap 'rm \-f $PIDFILE' EXIT
+and then
+.BR exec s
+Python.
+.B exec
+replaces the shell, so the trap never runs and the pidfile is left behind
+after every invocation, holding a PID that the kernel will eventually reuse.
+.BR stop\-mu2edaq\-commandline\-tools.sh (1)
+signals whatever process then holds that PID.
+.SH EXAMPLES
+.RS
+.nf
+\&./start\-mu2edaq\-commandline\-tools.sh otsdaq state \-\-instance crv
+\&./start\-mu2edaq\-commandline\-tools.sh \-\-no\-update config
+.fi
+.RE
+.SH SEE ALSO
+.BR mu2edaq\-tools (1),
+.BR stop\-mu2edaq\-commandline\-tools.sh (1),
+.BR bootstrap.sh (1)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

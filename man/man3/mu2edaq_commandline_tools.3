@@ -1,4 +1,4 @@
-.TH MU2EDAQ_COMMANDLINE_TOOLS 3 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Python API"
+.TH MU2EDAQ_COMMANDLINE_TOOLS 3 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
 .SH NAME
 mu2edaq_commandline_tools \- Python API for the Mu2e DAQ command line tools
 .SH SYNOPSIS
@@ -49,12 +49,34 @@ settings.
 .B load()
 raises
 .B ValueError
-when the YAML file's top level is not a mapping,
+when the YAML file's top level, its
+.B otsdaq
+block, or an
+.B otsdaq.instances
+entry is not a mapping,
 .B OSError
 when it cannot be read, and
 .B RuntimeError
-when PyYAML is missing. A config file that simply does not exist is not an
-error.
+when PyYAML is missing.
+A YAML syntax error propagates as
+.BR yaml.YAMLError ,
+which
+.B cli.main()
+does not catch.
+A config file that does not exist is not an error, including an
+.I explicit_path
+that does not exist: the defaults are then used without searching further.
+.PP
+Environment values for
+.B discovery_timeout
+and
+.B color
+are coerced to float and bool; a value that fails coercion is kept as the raw
+string.
+An empty environment variable counts as unset.
+There is no
+.I .env
+file layer.
 .PP
 .I environ
 defaults to
@@ -93,16 +115,43 @@ to the dispatcher.
 .B resolve_instance()
 selects a named
 .B otsdaq.instances
-profile, applies environment and command-line overrides, validates its origins
-and credentials, and derives the Slow Controls and TFM origins when omitted.
+profile and merges, lowest first: top-level
+.B otsdaq
+keys, the profile, the
+.B MU2EDAQ_TOOLS_OTSDAQ_*
+environment, and the keyword arguments.
+It validates the origins, derives Slow Controls (gateway port + 1) and TFM
+(gateway host, port 3047) when they are not given, and reads the CookieCode
+from
+.B MU2EDAQ_TOOLS_OTSDAQ_COOKIE
+or the owner-only
+.IR cookie_file .
+A CA bundle from any layer forces
+.B verify_tls
+on.
+The returned frozen dataclass
+.B InstanceConfig
+carries the CookieCode in its
+.B cookie_code
+field, which its default
+.B repr()
+includes.
 .PP
 .B OtsdaqClient
 provides synchronous typed reads for current state, run info, DAQ report/state,
 runtime macro inventory, PV data/settings, alarms, and console/system messages.
+Every request is an HTTP POST.
 Its
 .B request()
 method retains both exact XML and a normalized representation and is not
-restricted to read-only RequestTypes.
+restricted to read-only RequestTypes; it adds the CookieCode as a form field
+only when the LID is 281.
+Errors are raised as subclasses of
+.BR OtsdaqError :
+.BR OtsdaqConfigError ,
+.BR OtsdaqTransportError ,
+.BR OtsdaqHTTPError ,
+.BR OtsdaqProtocolError .
 .SH EXAMPLE
 .nf
 .RS

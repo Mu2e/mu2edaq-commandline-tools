@@ -1,141 +1,327 @@
-.TH MU2EDAQ-OTSDAQ 1 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ"
+.TH MU2EDAQ-OTSDAQ 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
 .SH NAME
-mu2edaq-tools otsdaq \- read status and diagnostics from a running otsdaq instance
+mu2edaq\-otsdaq \- mu2edaq\-tools otsdaq: query otsdaq over xdaq HTTP
 .SH SYNOPSIS
-.B mu2edaq-tools otsdaq
-.I read-command
-.RI [ options ]
-.PP
-.B mu2edaq-tools otsdaq raw
-.I RequestType
-.RI [ options ]
+.B mu2edaq\-tools otsdaq
+.I read\-command
+.RI [ arguments ]
+.RI [ connection\-options ]
+.RB [ \-\-json ]
+.RB [ \-\-watch
+.RB [ \-\-interval
+.IR S ]
+.RB [ \-\-count
+.IR N ]]
+.br
+.B mu2edaq\-tools otsdaq raw
+.I REQUEST_TYPE
+.RB [ \-\-service
+.IR NAME ]
+.RB [ \-\-lid
+.IR N ]
+.RB [ \-\-handler
+.BR request | state\-machine ]
+.RB [ \-\-query
+.IR K=V ]...
+.RB [ \-\-form
+.IR K=V ]...
+.RB [ \-\-xml ]
+.RI [ connection\-options ]
 .SH DESCRIPTION
-The otsdaq command group is a synchronous Python client for the xdaq HTTP
-endpoints observed in the Mu2e otsdaq packages. Modeled commands are
-read-only. They print a terminal-oriented view by default and a stable JSON
-envelope with
-.BR --json .
+Every request is an HTTP
+.B POST
+to
+.IB origin /urn:xdaq\-application:lid= LID /Request?RequestType= NAME ,
+or for
+.BR "raw \-\-handler state\-machine" ,
+to
+.BI .../StateMachineXgiHandler?StateMachine= NAME .
+The response must be XML with root
+.BR ROOT ;
+an
+.B Error
+element, an
+.B error
+field in
+.BR DATA ,
+or
+.B state_transition_attempted=0
+is reported as an error.
 .PP
-The JSON envelope contains
-.IR instance ,
-.IR command ,
-.IR timestamp ,
-and
-.IR data .
-With
-.BR --watch ,
-one envelope is emitted per line (NDJSON).
+The typed read commands send only otsdaq getter request types and never a
+CookieCode.
+They are read-only in so far as those getters are; that is otsdaq-core
+behaviour and is not verifiable from this package.
+.PP
+.B raw
+is not read-only.
+It posts any request type to any LID, including state transitions
+.RB ( \-\-handler state\-machine ),
+FE macro execution
+.RB ( runFEMacro ,
+LID 800) and configuration writes (LID 281).
+It prints a warning on stderr and proceeds without confirmation.
+.SS Origins
+.TP
+Gateway, Console, Macro Maker, Configuration
+.I gateway_url
+(LIDs 200, 260, 800, 281).
+.TP
+Slow Controls
+.IR slow_controls_url ,
+default the gateway port plus one (LID 282).
+.TP
+TFM
+.IR tfm_url ,
+default the gateway host on port 3047 (LID 302).
+The port is a constant taken from the CRV web client, so every profile without
+an explicit
+.I tfm_url
+on the same host, or tunnelled to
+.BR localhost ,
+resolves to the same TFM; set
+.I tfm_url
+per profile.
+.PP
+Origins must be
+.B http
+or
+.B https
+with no path, query, fragment or credentials.
 .SH READ COMMANDS
 .TP
 .B state
-Current run-control state.
+.B getCurrentState
+(LID 200).
 .TP
-.BI "run-info [" RUN_NUMBER ]
-Current run information when omitted or zero, or information for the requested
-run number.
+.B run\-info \fR[\fIRUN_NUMBER\fR]
+.B getRunInfo
+(LID 200); 0 or omitted means the current run.
 .TP
-.BR daq-report ", " daq-state
-TFM/artdaq report and process state.
+.BR daq\-report ", " daq\-state
+.BR getDAQReport ,
+.B getDAQState
+(TFM).
 .TP
 .B macros
-Runtime FE, public, and private macro inventory. This does not execute a macro.
+.B getFEMacroList
+(LID 800): FE, public and private macros.
+Lists, does not execute.
 .TP
-.BR pv-list ", " "pv-read " "PV..." ", " "pv-settings " "PV..."
-List PVs or read values and settings through Slow Controls.
+.B pv\-list
+.B getList
+(Slow Controls).
 .TP
-.BR "alarms [" "PV..." "]" ", " alarm-checks
-Read alarm data or the dashboard alarm-check status.
+.BI pv\-read " PV" " \fR...\fP"
+.BR getPvData .
 .TP
-.BI "console [" "--lcount N" ]
-Read console messages. Watch mode carries the returned count into the next
-request when the server supplies one.
+.BI pv\-settings " PV" " \fR...\fP"
+.BR getPVSettings .
 .TP
-.BI "messages [" --history ]
-Read gateway system messages.
-.SH COMMON OPTIONS
+.B alarms \fR[\fIPV\fR ...]
+.BR getLastAlarmsData .
 .TP
-.BI "--instance " NAME
-Select a named profile. Otherwise
-.B otsdaq.default_instance
-is required.
+.B alarm\-checks
+.BR getAlarmsCheck .
 .TP
-.BI "--gateway-url " ORIGIN
-Override the Gateway, Console, and Macro Maker origin.
+.B console \fR[\fB\-\-lcount\fR \fIN\fR]
+.B GetConsoleMsgs
+(LID 260).
+In watch mode the returned count becomes the next
+.IR lcount .
 .TP
-.BI "--slow-controls-url " ORIGIN
-Override the Slow Controls origin. The default is the gateway port plus one.
+.B messages \fR[\fB\-\-history\fR]
+.B getSystemMessages
+(LID 200).
+.SH OPTIONS
+.SS Connection (all commands)
 .TP
-.BI "--tfm-url " ORIGIN
-Override the TFM origin. The default is the gateway host on port 3047.
+.BI \-\-instance " NAME"
+Profile under
+.BR otsdaq.instances .
+Default:
+.BR MU2EDAQ_TOOLS_OTSDAQ_INSTANCE ,
+then
+.BR otsdaq.default_instance .
+Without a profile, a gateway URL from an option, the environment or the
+top-level
+.B otsdaq
+block is required.
 .TP
-.BI "--timeout " SECONDS
-HTTP timeout. Default: 10 seconds.
+.BI \-\-gateway\-url " ORIGIN"
 .TP
-.BR --verify-tls ", " --insecure
-Enable or disable server certificate verification. The Phase 1 default is
-insecure and emits a warning on stderr.
+.BI \-\-slow\-controls\-url " ORIGIN"
 .TP
-.BI "--ca-bundle " FILE
-Use a custom CA bundle and enable verification.
+.BI \-\-tfm\-url " ORIGIN"
+Override the origins.
 .TP
-.B --json
-Emit a stable JSON envelope instead of the human view.
+.BI \-\-timeout " SECONDS"
+Per request; default 10; must be positive.
 .TP
-.B --watch
-Poll until interrupted or until
-.B --count
-samples have been emitted.
+.BR \-\-verify\-tls ", " \-\-insecure
+Enable or disable certificate verification.
+The shipped default is disabled, and every invocation prints
+.B "warning: TLS certificate verification is disabled"
+on stderr.
+A configured CA bundle forces verification on, even with
+.BR \-\-insecure .
 .TP
-.BI "--interval " SECONDS
-Polling interval. Default: 2 seconds.
+.BI \-\-ca\-bundle " FILE"
+CA bundle; must exist; enables verification.
+.SS Read commands
 .TP
-.BI "--count " N
-Bound watch mode to N samples.
-.SH RAW REQUESTS
-.B raw
-is an expert escape hatch and is not read-only. It can invoke configuration
-writes, macro execution, or state transitions and therefore warns on every
-invocation. It never repeats automatically.
+.B \-\-json
+One JSON object per sample:
+.BR "{\(dqinstance\(dq, \(dqcommand\(dq, \(dqtimestamp\(dq, \(dqdata\(dq}" .
+With
+.BR \-\-watch ,
+newline-delimited.
+.TP
+.B \-\-watch
+Repeat until Ctrl-C or
+.BR \-\-count .
+.TP
+.BI \-\-interval " SECONDS"
+Default 2; must be positive.
+.TP
+.BI \-\-count " N"
+Stop after
+.I N
+samples; requires
+.BR \-\-watch .
+.SS raw
+.TP
+.BI \-\-service " NAME"
+.BR gateway ,
+.BR console ,
+.BR config ,
+.BR slow\-controls ,
+.B tfm
+or
+.BR macro ;
+selects both LID and origin.
+Default
+.BR gateway .
+.TP
+.BI \-\-lid " N"
+Explicit LID.
+The origin follows
+.B \-\-service
+when given, otherwise the LID: 282 Slow Controls, 302 TFM, anything else the
+gateway.
+.TP
+.BR \-\-handler " request|state\-machine"
+Default
+.BR request .
+.TP
+.BI \-\-query " KEY=VALUE"
+URL query parameter; repeatable.
+.TP
+.BI \-\-form " KEY=VALUE"
+Form body field; repeatable.
+.TP
+.B \-\-xml
+Print the response XML exactly instead of normalized JSON.
+.SH FILES
+The config file of
+.BR mu2edaq\-tools (1),
+section
+.BR otsdaq :
 .PP
-Options are
-.BR "--service gateway|console|config|slow-controls|tfm|macro" ,
-.BI "--lid " N ,
-.BR "--handler request|state-machine" ,
-repeated
-.BI "--query " KEY=VALUE
-and
-.BI "--form " KEY=VALUE ,
-and
-.B --xml
-for the exact response instead of normalized JSON.
-.SH AUTHENTICATION
-Reads are anonymous unless a CookieCode is supplied through
+.RS
+.nf
+otsdaq:
+  default_instance: crv
+  timeout: 10.0
+  verify_tls: false
+  ca_bundle: null
+  instances:
+    crv:
+      gateway_url: https://localhost:3075
+      slow_controls_url: https://localhost:3076   # optional
+      tfm_url: https://localhost:3047             # optional
+      cookie_file: ~/.config/mu2edaq/crv\-cookie   # optional, path only
+.fi
+.RE
+.PP
+Top-level
+.B otsdaq
+keys are defaults for every profile; profile keys override them;
+environment variables override both; options override everything.
+.SH ENVIRONMENT
+.TP
+.BR MU2EDAQ_TOOLS_OTSDAQ_INSTANCE ", " _GATEWAY_URL ", " _SLOW_CONTROLS_URL ", " _TFM_URL ", " _TIMEOUT ", " _VERIFY_TLS ", " _CA_BUNDLE ", " _COOKIE_FILE
+Override the selected profile.
+.TP
 .B MU2EDAQ_TOOLS_OTSDAQ_COOKIE
-or a profile's
-.B cookie_file .
-Credential files must be owner-only on POSIX systems. Cookie values are never
-accepted as dedicated command-line options or ordinary YAML values. The
-credential is sent only to LID 281 (Configuration Supervisor).
+CookieCode value.
+When set, the cookie file is not read.
+.SH AUTHENTICATION
+The CookieCode comes from
+.B MU2EDAQ_TOOLS_OTSDAQ_COOKIE
+or from the profile's
+.BR cookie_file .
+On POSIX the file must have no group or other permission bits (for example
+0600 or 0400), or every command fails.
+The file is read for every command, although only requests to LID 281 carry
+it, as the form field
+.BR CookieCode ;
+no typed read uses LID 281.
+.B raw \-\-lid 281
+with
+.B \-\-service tfm
+or
+.B slow\-controls
+sends it to that origin.
+The value never appears in an error message or in
+.BR "mu2edaq\-tools config" .
+A
+.B \-\-form CookieCode=...
+supplied by hand is visible in the process list and shell history.
 .SH EXIT STATUS
 .TP
 .B 0
 Success.
 .TP
 .B 1
-Configuration, transport, HTTP, XML, embedded-JSON, or otsdaq response error.
+Configuration, transport, HTTP, XML, embedded-JSON or otsdaq error.
 .TP
 .B 2
-Invalid arguments.
+No read command, invalid option value, or malformed
+.IR KEY=VALUE .
 .TP
 .B 130
-Watch mode interrupted with Ctrl-C.
+Watch mode interrupted.
+.SH BUGS
+.B macros
+splits each
+.B FEMacros
+value on
+.B :
+and expects no tooltip field.
+The newer otsdaq\-mu2e web client
+.RI ( UserWebGUI/js/Mu2eHardware.js )
+splits the same value on
+.B ;
+and reads a tooltip after the permission field.
+Which format the deployed otsdaq emits is not determined here; with the
+semicolon format
+.B macros
+fails with a protocol error.
+.B "raw getFEMacroList \-\-service macro \-\-xml"
+shows the raw value.
 .SH EXAMPLES
+.RS
 .nf
-mu2edaq-tools otsdaq state --instance crv
-mu2edaq-tools otsdaq pv-read Mu2e:TDAQ_crv:daq08DTC:Temperature --json
-mu2edaq-tools otsdaq daq-state --watch --count 5 --json
-mu2edaq-tools otsdaq raw getAppStatus --service gateway --xml
+mu2edaq\-tools otsdaq state \-\-instance crv
+mu2edaq\-tools otsdaq pv\-read Mu2e:TDAQ_crv:daq08DTC:Temperature \-\-json
+mu2edaq\-tools otsdaq daq\-state \-\-watch \-\-count 5 \-\-json
+mu2edaq\-tools otsdaq \-\-help
+mu2edaq\-tools otsdaq raw getAppStatus \-\-service gateway \-\-xml
 .fi
+.RE
 .SH SEE ALSO
-.BR mu2edaq-tools (1),
+.BR mu2edaq\-tools (1),
 .BR mu2edaq_commandline_tools (3)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.

@@ -1,6 +1,6 @@
-.TH MU2EDAQ_CLI_CORE 3 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ C++ API"
+.TH MU2EDAQ_CLI_CORE 3 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
 .SH NAME
-mu2edaq_cli_core \- C++ configuration helpers for the Mu2e DAQ command line tools
+mu2edaq_cli_core \- C++ config-file lookup for the Mu2e DAQ command line tools
 .SH SYNOPSIS
 .nf
 .B #include <mu2edaq_cli_core.hpp>
@@ -9,9 +9,9 @@ mu2edaq_cli_core \- C++ configuration helpers for the Mu2e DAQ command line tool
 .PP
 .BI "const char* version();"
 .BI "const char* env_prefix();"
-.BI "std::vector<std::string> config_search_paths(const std::string& " explicit_path " = \"\");"
-.BI "std::string find_config(const std::string& " explicit_path " = \"\");"
-.BI "std::string env_override(const std::string& " key ", const std::string& " fallback " = \"\");"
+.BI "std::vector<std::string> config_search_paths(const std::string& " explicit_path " = \(dq\(dq);"
+.BI "std::string find_config(const std::string& " explicit_path " = \(dq\(dq);"
+.BI "std::string env_override(const std::string& " key ", const std::string& " fallback " = \(dq\(dq);"
 .PP
 .B }}
 .fi
@@ -27,10 +27,24 @@ target_link_libraries(mytool PRIVATE mu2edaq::cli_core)
 .fi
 .RE
 .SH DESCRIPTION
-This library gives C++ tools the same configuration lookup the Python package
-uses, so a C++ tool and a Python tool started from the same directory read the
-same YAML file. It does not parse YAML; it locates the file and reads the
-environment. Pick your own parser for the contents.
+This library locates the config file and reads single
+.B MU2EDAQ_TOOLS_*
+variables.
+It does not parse YAML, holds no defaults and has no command-line layer, so
+the command line > environment > file > defaults precedence of the Python
+package is left to each C++ tool.
+.PP
+Its search list is not the Python one: it omits the package's own
+.I config/mu2edaq\-commandline\-tools.yaml
+(fourth in the Python list), and it does no
+.B ~
+expansion of
+.I explicit_path
+or
+.BR MU2EDAQ_TOOLS_CONFIG .
+From a directory without its own config file, a C++ tool and the editable
+Python install therefore choose different files; see
+.BR mu2edaq\-tools\-info (1).
 .TP
 .B version()
 Package version string, e.g.
@@ -53,6 +67,13 @@ is non-empty it is the only candidate returned. Otherwise the order is
 .IR ~/.config/mu2edaq/commandline-tools.yaml ", "
 .IR /etc/mu2edaq/commandline-tools.yaml .
 Paths are returned whether or not they exist.
+The user entry is built from
+.B HOME
+(on Windows
+.BR USERPROFILE ,
+else
+.BR HOMEDRIVE HOMEPATH )
+and is omitted when that is empty.
 .TP
 .B find_config()
 The first candidate that is an existing regular file, or an empty string if

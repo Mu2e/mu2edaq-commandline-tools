@@ -1,138 +1,208 @@
-.TH MU2EDAQ-TOOLS 1 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ"
+.TH MU2EDAQ-TOOLS 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
 .SH NAME
-mu2edaq-tools \- command line utilities for the Mu2e DAQ suite
+mu2edaq-tools \- dispatcher for the Mu2e DAQ command line utilities
 .SH SYNOPSIS
-.B mu2edaq-tools
-.RI [ global-options ]
+.B mu2edaq\-tools
+.RB [ \-c
+.IR FILE ]
+.RB [ \-\-cluster
+.IR NAME ]
+.RB [ \-\-discovery\-timeout
+.IR SECONDS ]
+.RB [ \-\-log\-level
+.IR LEVEL ]
+.RB [ \-\-log\-dir
+.IR DIR ]
+.RB [ \-\-color | \-\-no\-color ]
 .I command
-.RI [ command-options ]
+.RI [ command\-options ]
+.br
+.B mu2edaq\-tools
+.BR \-V | \-h
 .SH DESCRIPTION
-.B mu2edaq-tools
-is the dispatcher for the Mu2e DAQ command line utilities. Each utility is a
-subcommand; run
-.B mu2edaq-tools list
-to see the ones this build provides.
+.B mu2edaq\-tools
+dispatches to subcommands registered in
+.B mu2edaq_commandline_tools.cli.COMMANDS
+and hands each one the effective configuration.
 .PP
-Configuration is resolved from four sources. Highest precedence first:
-command line options, environment variables
-.RB ( MU2EDAQ_TOOLS_ *),
-the YAML config file, and the built-in defaults. None of them are required:
-with no config file and an empty environment the defaults are a usable
-configuration.
+The configuration is resolved once per invocation from four sources, highest
+precedence first: command-line options,
+.B MU2EDAQ_TOOLS_*
+environment variables, one YAML file, built-in defaults.
+An environment variable set to the empty string is treated as unset.
+There is no
+.I .env
+layer.
+.PP
+The five global settings
+.RB ( cluster ,
+.BR discovery_timeout ,
+.BR log_level ,
+.BR log_dir ,
+.BR color )
+are resolved and shown by
+.B config
+but no current subcommand uses them: the package configures no logging,
+performs no discovery and prints no colour.
 .SH COMMANDS
 .TP
 .B list
-List the available tools with their one-line descriptions.
+Registered subcommands with their one-line help.
 .TP
-.B config " [--json]"
-Show the effective configuration and the config file it came from. With
-.B --json
-the output is a JSON object with
-.I config_file
-and
-.I values
-members, suitable for scripting.
+.B config \fR[\fB\-\-json\fR]
+The effective configuration and the file it came from.
+With
+.B \-\-json
+the output is
+.BR "{\(dqconfig_file\(dq: path|null, \(dqvalues\(dq: {...}}" .
+The CookieCode itself is never part of the configuration and is not shown.
 .TP
 .B version
-Print the package version.
+Package version.
 .TP
 .B otsdaq
-Read state, run information, DAQ status, live macro inventory, Slow Controls,
-alarms, and logs from a running otsdaq instance. See
-.BR mu2edaq-otsdaq (1).
-.SH GLOBAL OPTIONS
+Read state and diagnostics from a running otsdaq instance, plus the
+unrestricted
+.B raw
+request; see
+.BR mu2edaq\-otsdaq (1).
+.SH OPTIONS
+Global options must precede the subcommand.
 .TP
 .BR \-c ", " \-\-config " \fIFILE\fR"
-Read configuration from
+Use
 .I FILE
-instead of searching the standard locations.
+as the only candidate.
+A
+.I FILE
+that does not exist is not an error: the built-in defaults are used and
+.B config
+reports no file.
 .TP
-.BR \-\-cluster " \fINAME\fR"
-Cluster to operate on. Default:
+.BI \-\-cluster " NAME"
+Default
 .BR mu2edaq .
+Unused.
 .TP
-.BR \-\-discovery\-timeout " \fISECONDS\fR"
-Seconds to wait for mu2edaq-discovery responses. Default:
+.BI \-\-discovery\-timeout " SECONDS"
+Default
 .BR 2.0 .
+Unused.
 .TP
-.BR \-\-log\-level " \fILEVEL\fR"
-One of DEBUG, INFO, WARNING, ERROR, CRITICAL. Default:
+.BI \-\-log\-level " LEVEL"
+One of DEBUG, INFO, WARNING, ERROR, CRITICAL.
+Default
 .BR INFO .
+Unused.
 .TP
-.BR \-\-log\-dir " \fIDIR\fR"
-Directory for log files. Default:
+.BI \-\-log\-dir " DIR"
+Default
 .BR logs .
+Unused by the tools.
+.BR stop\-mu2edaq\-commandline\-tools.sh (1)
+recursively deletes the directory named by
+.BR MU2EDAQ_TOOLS_LOG_DIR ;
+the
+.B \-\-log\-dir
+option and the file key do not reach it.
 .TP
 .BR \-\-color ", " \-\-no\-color
-Force colored output on or off.
+Default on.
+Unused.
 .TP
 .BR \-V ", " \-\-version
-Print the version and exit.
+Print
+.B mu2edaq\-tools
+.I version
+and exit.
 .TP
 .BR \-h ", " \-\-help
-Show help and exit.
-.SH ENVIRONMENT
-.TP
-.B MU2EDAQ_TOOLS_CONFIG
-Config file to read when
-.B \-\-config
-is not given.
-.TP
-.BR MU2EDAQ_TOOLS_CLUSTER ", " MU2EDAQ_TOOLS_DISCOVERY_TIMEOUT ", " \
-MU2EDAQ_TOOLS_LOG_LEVEL ", " MU2EDAQ_TOOLS_LOG_DIR ", " MU2EDAQ_TOOLS_COLOR
-Override the corresponding config file key. Command line options win over
-these.
-.TP
-.BR MU2EDAQ_TOOLS_OTSDAQ_INSTANCE ", " MU2EDAQ_TOOLS_OTSDAQ_GATEWAY_URL ", " \
-MU2EDAQ_TOOLS_OTSDAQ_SLOW_CONTROLS_URL ", " MU2EDAQ_TOOLS_OTSDAQ_TFM_URL
-Select and override the otsdaq connection.
-.TP
-.BR MU2EDAQ_TOOLS_OTSDAQ_COOKIE ", " MU2EDAQ_TOOLS_OTSDAQ_COOKIE_FILE
-Supply an optional otsdaq CookieCode directly or through an owner-only file.
+Help, also per subcommand.
 .SH FILES
-Searched in order; the first one that exists is used:
+The first existing regular file in this list is read:
 .PP
 .RS
 .nf
+\-c FILE                                  (if given, the only candidate)
 $MU2EDAQ_TOOLS_CONFIG
-./mu2edaq-commandline-tools.yaml
-./config/mu2edaq-commandline-tools.yaml
-<checkout>/config/mu2edaq-commandline-tools.yaml
-~/.config/mu2edaq/commandline-tools.yaml
-/etc/mu2edaq/commandline-tools.yaml
+\&./mu2edaq\-commandline\-tools.yaml
+\&./config/mu2edaq\-commandline\-tools.yaml
+<package>/config/mu2edaq\-commandline\-tools.yaml   (Python only)
+~/.config/mu2edaq/commandline\-tools.yaml
+/etc/mu2edaq/commandline\-tools.yaml
 .fi
 .RE
+.PP
+.I <package>
+is two directories above the installed
+.IR config.py .
+For the editable install that
+.B bootstrap.sh
+creates, that is the checkout, whose tracked
+.I config/mu2edaq\-commandline\-tools.yaml
+always exists; the user and system files are then never reached by the Python
+tools, while
+.BR mu2edaq\-tools\-info (1)
+does reach them.
+.B \-c
+and
+.B MU2EDAQ_TOOLS_CONFIG
+undergo
+.B ~
+expansion here and not in the C++ library.
+.PP
+.B cmake \-\-install
+writes the reference file to
+.IR ${prefix}/etc/mu2edaq/commandline\-tools.yaml ,
+which is on neither search path unless the prefix is
+.IR / .
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_CONFIG
+Config file when
+.B \-c
+is absent.
+A nonexistent path is skipped and the search continues.
+.TP
+.BR MU2EDAQ_TOOLS_CLUSTER ", " MU2EDAQ_TOOLS_DISCOVERY_TIMEOUT ", " MU2EDAQ_TOOLS_LOG_LEVEL ", " MU2EDAQ_TOOLS_LOG_DIR ", " MU2EDAQ_TOOLS_COLOR
+Override the matching file key; options override these.
+.TP
+.BR MU2EDAQ_TOOLS_OTSDAQ_INSTANCE ", " _GATEWAY_URL ", " _SLOW_CONTROLS_URL ", " _TFM_URL ", " _TIMEOUT ", " _VERIFY_TLS ", " _CA_BUNDLE ", " _COOKIE_FILE
+Override the selected otsdaq profile; see
+.BR mu2edaq\-otsdaq (1).
+.TP
+.B MU2EDAQ_TOOLS_OTSDAQ_COOKIE
+CookieCode value; wins over any cookie file.
 .SH EXIT STATUS
 .TP
 .B 0
 Success.
 .TP
 .B 1
-The configuration could not be read.
+The config file could not be read or is not a mapping, or PyYAML is missing.
+A YAML syntax error is not caught and ends in a Python traceback, also with
+status 1.
 .TP
 .B 2
-No command was given, or the command line was invalid.
+No subcommand, or an invalid command line.
+.PP
+Subcommands return their own status; see
+.BR mu2edaq\-otsdaq (1).
 .SH EXAMPLES
-Show what the tools would use, from the current directory:
-.PP
 .RS
 .nf
-mu2edaq\-tools config
-.fi
-.RE
-.PP
-Point at a different cluster for one invocation:
-.PP
-.RS
-.nf
-mu2edaq\-tools \-\-cluster mu2edaq\-test config \-\-json
+mu2edaq\-tools config                     # which file, which values
+mu2edaq\-tools \-c ./site.yaml config \-\-json
+MU2EDAQ_TOOLS_CONFIG=~/.config/mu2edaq/commandline\-tools.yaml mu2edaq\-tools config
+mu2edaq\-tools otsdaq state \-\-instance crv
 .fi
 .RE
 .SH SEE ALSO
-.BR mu2edaq-tools-info (1),
-.BR mu2edaq-otsdaq (1),
-.BR mu2edaq-commandline-tools-bootstrap (1),
-.BR mu2edaq_cli_core (3),
-.BR mu2edaq_commandline_tools (3)
+.BR mu2edaq\-otsdaq (1),
+.BR mu2edaq\-tools\-info (1),
+.BR start\-mu2edaq\-commandline\-tools.sh (1),
+.BR bootstrap.sh (1),
+.BR mu2edaq_commandline_tools (3),
+.BR mu2edaq_cli_core (3)
 .SH AUTHOR
 Andrew Norman, Mu2e DAQ group.

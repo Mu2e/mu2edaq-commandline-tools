@@ -1,71 +1,115 @@
-.TH MU2EDAQ-TOOLS-INFO 1 "2026-07-27" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ"
+.TH MU2EDAQ-TOOLS-INFO 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
 .SH NAME
-mu2edaq-tools-info \- report the config file the C++ DAQ tools would use
+mu2edaq\-tools\-info \- report the config file the C++ library would choose
 .SH SYNOPSIS
-.B mu2edaq-tools-info
-.RI [ options ]
+.B mu2edaq\-tools\-info
+.RB [ \-c
+.IR FILE ]
+.RB [ \-p ]
+.br
+.B mu2edaq\-tools\-info
+.BR \-V | \-h
 .SH DESCRIPTION
-.B mu2edaq-tools-info
-is the C++ counterpart to
-.BR "mu2edaq-tools config" .
-It prints the version of the
+Prints the version compiled into
 .B mu2edaq_cli_core
-library it was linked against and the YAML config file a C++ tool started from
-the current working directory would read, without starting anything else.
+and the result of
+.BR mu2edaq::cli::find_config ()
+from the current directory.
+It reads no YAML and no settings; the C++ library has no YAML parser.
 .PP
-It is a diagnostic: use it when a C++ and a Python tool disagree about their
-settings, to see which file each one actually picked up.
+It is the counterpart to
+.BR "mu2edaq\-tools config" ,
+but the two search lists differ, so the files they report can differ from the
+same directory; see FILES.
 .SH OPTIONS
+Options are processed left to right;
+.B \-h
+and
+.B \-V
+exit as soon as they are seen.
+Only the separate-argument form
+.B \-c
+.I FILE
+is accepted, not
+.BR \-\-config=FILE .
 .TP
 .BR \-c ", " \-\-config " \fIFILE\fR"
-Report on
+Make
 .I FILE
-instead of searching the standard locations.
+the only candidate.
+No
+.B ~
+expansion is done.
+A
+.I FILE
+that does not exist prints
+.B (none found, using defaults)
+and exits 0.
 .TP
 .BR \-p ", " \-\-paths
-List every candidate path in search order, marking the one in use with
+Also list every candidate in search order, marking the chosen one with
 .BR * .
 .TP
 .BR \-V ", " \-\-version
-Print the version and exit.
+Print
+.B mu2edaq\-tools\-info
+.I version
+and exit.
 .TP
 .BR \-h ", " \-\-help
 Show help and exit.
-.SH ENVIRONMENT
-.TP
-.B MU2EDAQ_TOOLS_CONFIG
-Config file to use when
-.B \-\-config
-is not given.
 .SH FILES
-The same search order as
-.BR mu2edaq-tools (1),
-minus the Python checkout entry:
+The first existing regular file in:
 .PP
 .RS
 .nf
-$MU2EDAQ_TOOLS_CONFIG
-./mu2edaq-commandline-tools.yaml
-./config/mu2edaq-commandline-tools.yaml
-~/.config/mu2edaq/commandline-tools.yaml
-/etc/mu2edaq/commandline-tools.yaml
+$MU2EDAQ_TOOLS_CONFIG        (used literally, no ~ expansion)
+\&./mu2edaq\-commandline\-tools.yaml
+\&./config/mu2edaq\-commandline\-tools.yaml
+$HOME/.config/mu2edaq/commandline\-tools.yaml
+/etc/mu2edaq/commandline\-tools.yaml
 .fi
 .RE
+.PP
+On Windows
+.B USERPROFILE
+(else
+.BR HOMEDRIVE HOMEPATH )
+replaces
+.BR HOME .
+The Python list has one more entry between the third and fourth lines of
+this list, the package's own
+.IR config/mu2edaq\-commandline\-tools.yaml ,
+which for the editable install always exists.
+From any directory without its own config file, the Python tools then read
+the checkout's file while this tool reports the user or system file.
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_CONFIG
+First candidate when
+.B \-c
+is absent.
+.TP
+.B HOME
+Base of the user candidate.
 .SH EXIT STATUS
 .TP
 .B 0
-Success.
+Success, including when no file is found.
 .TP
 .B 2
-Invalid command line.
+Unknown option, or
+.B \-c
+without an argument.
 .SH EXAMPLES
 .RS
 .nf
 mu2edaq\-tools\-info \-\-paths
+MU2EDAQ_TOOLS_CONFIG=$HOME/site.yaml mu2edaq\-tools\-info
 .fi
 .RE
 .SH SEE ALSO
-.BR mu2edaq-tools (1),
+.BR mu2edaq\-tools (1),
 .BR mu2edaq_cli_core (3)
 .SH AUTHOR
 Andrew Norman, Mu2e DAQ group.

@@ -1,0 +1,93 @@
+.TH STOP-MU2EDAQ-COMMANDLINE-TOOLS.SH 1 "2026-10-06" "mu2edaq-commandline-tools 0.2.0" "Mu2e DAQ Manual"
+.SH NAME
+stop\-mu2edaq\-commandline\-tools.sh \- signal the pidfile PID and clean up
+.SH SYNOPSIS
+.B ./stop\-mu2edaq\-commandline\-tools.sh
+.RB [ \-\-timeout
+.IR SECS ]
+.RB [ \-\-keep\-logs ]
+.SH DESCRIPTION
+If the pidfile exists and its PID answers
+.BR "kill \-0" ,
+sends SIGTERM, polls once a second for up to
+.I SECS
+seconds, and sends SIGKILL if the process is still alive.
+It does not check that the PID belongs to
+.BR mu2edaq\-tools .
+A PID that is not running is reported as stale.
+The pidfile is then removed.
+.PP
+It then deletes every
+.I __pycache__
+directory under the checkout (including
+.IR venv/ )
+and, unless
+.B \-\-keep\-logs
+is given, runs
+.B rm \-rf
+on the log directory.
+.PP
+No tool in this package writes logs or a log directory.
+.SH OPTIONS
+.TP
+.BI \-\-timeout " SECS"
+Seconds between SIGTERM and SIGKILL.
+Default 10.
+A non-integer value makes the wait loop's test fail at once, so SIGKILL
+follows immediately.
+.TP
+.B \-\-keep\-logs
+Do not delete the log directory.
+.TP
+.BR \-h ", " \-\-help
+Print the script's header comment and exit.
+.SH ENVIRONMENT
+.TP
+.B MU2EDAQ_TOOLS_PIDFILE
+Pidfile location.
+Default:
+.I .mu2edaq\-tools.pid
+in the checkout.
+.TP
+.B MU2EDAQ_TOOLS_LOG_DIR
+Directory to delete.
+Default:
+.I logs
+in the checkout.
+This is also the environment override for the
+.B log_dir
+setting of
+.BR mu2edaq\-tools (1);
+whatever directory it names is removed recursively, without confirmation.
+A relative value is resolved against the current directory.
+The
+.B log_dir
+key in the config file is not consulted.
+.SH EXIT STATUS
+.TP
+.B 0
+Success, including when there was nothing to stop.
+.TP
+.B 1
+.B \-\-timeout
+without an argument.
+.TP
+.B 2
+Unknown option.
+.SH BUGS
+.BR start\-mu2edaq\-commandline\-tools.sh (1)
+never removes its pidfile, so after any completed run the file holds a PID
+that may since have been reused by an unrelated process of the same user,
+which this script will then terminate.
+.SH EXAMPLES
+.RS
+.nf
+\&./stop\-mu2edaq\-commandline\-tools.sh \-\-keep\-logs
+\&./stop\-mu2edaq\-commandline\-tools.sh \-\-timeout 30
+.fi
+.RE
+.SH SEE ALSO
+.BR start\-mu2edaq\-commandline\-tools.sh (1),
+.BR mu2edaq\-tools (1)
+.SH AUTHOR
+Andrew Norman, Mu2e DAQ group.
