@@ -199,7 +199,7 @@ Other clients of the same response disagree:
 |---|---|---|---|
 | this package (`client.py:292`) | `:` | no | 2026-09-17 |
 | `otsdaq-mu2e-calorimeter/UserWebGUI/html/Calorimeter_Test.html:167` | `:` | no | 2024 |
-| `otsdaq-mu2e/UserWebGUI/js/Mu2eHardware.js:153`, `:173` | `;` | yes, URI-encoded, after permissions | 2026-06-26 |
+| `otsdaq-mu2e/UserWebGUI/js/Mu2eHardware.js:153`, `:172` | `;` | yes, URI-encoded, after permissions | 2026-06-26 |
 | `mu2edaq-CFOControl` UDP path (`ots_mm_udp_interface.py:262-288`) | `;` | yes | — |
 
 The string is built in otsdaq core, which is not in this superproject, so the

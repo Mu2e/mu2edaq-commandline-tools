@@ -1,0 +1,175 @@
+schema: mega-review/1
+package: mu2edaq-commandline-tools
+tier: A
+group: network-arbitration
+repo:
+  url: git@github.com:Mu2e/mu2edaq-commandline-tools.git
+  exists: true
+  issues_enabled: true
+doc_dir: doc
+summary: >
+  Single mu2edaq-tools dispatcher with one YAML config and a command line >
+  environment > file > defaults rule, whose only real subcommand is an otsdaq
+  xdaq HTTP client (typed getter reads plus an unrestricted raw request),
+  alongside a C++17 library that locates the same config file but does not
+  parse it
+languages: [python, cpp, shell]
+loc: 3013
+
+runtime:
+  executables:
+    - name: mu2edaq-tools
+      kind: cli
+      man_page: man/man1/mu2edaq-tools.1
+    - name: mu2edaq-tools otsdaq
+      kind: cli
+      man_page: man/man1/mu2edaq-otsdaq.1
+    - name: mu2edaq-tools-info
+      kind: cli
+      man_page: man/man1/mu2edaq-tools-info.1
+    - name: mu2edaq_cli_core
+      kind: library
+      man_page: man/man3/mu2edaq_cli_core.3
+    - name: mu2edaq_commandline_tools
+      kind: library
+      man_page: man/man3/mu2edaq_commandline_tools.3
+    - name: extract-femacros.py
+      kind: script
+      man_page: man/man1/extract-femacros.py.1
+    - name: bootstrap.sh
+      kind: script
+      man_page: man/man1/bootstrap.sh.1
+    - name: start-mu2edaq-commandline-tools.sh
+      kind: script
+      man_page: man/man1/start-mu2edaq-commandline-tools.sh.1
+    - name: stop-mu2edaq-commandline-tools.sh
+      kind: script
+      man_page: man/man1/stop-mu2edaq-commandline-tools.sh.1
+    - name: html/validate.py
+      kind: script
+      waiver: "test helper for the static html/ walkthrough; takes no options, run as python3 html/validate.py; documented in html/README.md"
+  services: []
+  ports:
+    - {port: 3075, proto: tcp, role: otsdaq-gateway-destination-example-https, source: "config/mu2edaq-commandline-tools.yaml:41"}
+    - {port: 3076, proto: tcp, role: otsdaq-slow-controls-destination-gateway-plus-one, source: "src/mu2edaq_commandline_tools/otsdaq/settings.py:74"}
+    - {port: 3047, proto: tcp, role: otsdaq-tfm-destination-fixed, source: "src/mu2edaq_commandline_tools/otsdaq/settings.py:183"}
+  config_files: [config/mu2edaq-commandline-tools.yaml]
+  env_vars:
+    - MU2EDAQ_TOOLS_CONFIG
+    - MU2EDAQ_TOOLS_CLUSTER
+    - MU2EDAQ_TOOLS_DISCOVERY_TIMEOUT
+    - MU2EDAQ_TOOLS_LOG_LEVEL
+    - MU2EDAQ_TOOLS_LOG_DIR
+    - MU2EDAQ_TOOLS_COLOR
+    - MU2EDAQ_TOOLS_OTSDAQ_INSTANCE
+    - MU2EDAQ_TOOLS_OTSDAQ_GATEWAY_URL
+    - MU2EDAQ_TOOLS_OTSDAQ_SLOW_CONTROLS_URL
+    - MU2EDAQ_TOOLS_OTSDAQ_TFM_URL
+    - MU2EDAQ_TOOLS_OTSDAQ_TIMEOUT
+    - MU2EDAQ_TOOLS_OTSDAQ_VERIFY_TLS
+    - MU2EDAQ_TOOLS_OTSDAQ_CA_BUNDLE
+    - MU2EDAQ_TOOLS_OTSDAQ_COOKIE_FILE
+    - MU2EDAQ_TOOLS_OTSDAQ_COOKIE
+    - MU2EDAQ_TOOLS_PIDFILE
+    - PYTHON
+
+interactions:
+  depends_on:
+    - package: otsdaq-mu2e
+      via: http
+      direction: out
+      evidence: "src/mu2edaq_commandline_tools/otsdaq/client.py:131"
+  depended_on_by: []
+  external: [otsdaq-core-xdaq-http]
+
+quality:
+  tests: {present: true, framework: pytest+cppunit, count: 56}
+  ci: {present: false, workflows: []}
+  license: MIT
+  artifacts_clean: true
+
+findings:
+  - id: CLT-001
+    severity: S2
+    type: bug
+    title: "[otsdaq] every profile derives the same TFM origin, so daq-state for one subsystem can silently read another's"
+    issue: pending
+    fingerprint: bf64b95e
+  - id: CLT-002
+    severity: S2
+    type: bug
+    title: "[lifecycle] the stop script rm -rf's whatever MU2EDAQ_TOOLS_LOG_DIR names, which is also the documented log_dir override"
+    issue: pending
+    fingerprint: 9bd063a8
+  - id: CLT-003
+    severity: S3
+    type: bug
+    title: "[tls] certificate verification is off by default for every otsdaq request"
+    issue: pending
+    fingerprint: 9ce11c1c
+  - id: CLT-004
+    severity: S3
+    type: bug
+    title: "[config] Python and C++ choose different config files from the same directory, contrary to the package's stated premise"
+    issue: pending
+    fingerprint: a38ffbb8
+  - id: CLT-005
+    severity: S3
+    type: bug
+    title: "[lifecycle] exec discards the EXIT trap, so the pidfile outlives every run and stop signals a recycled PID"
+    issue: pending
+    fingerprint: 9ddbff77
+  - id: CLT-006
+    severity: S3
+    type: bug
+    title: "[otsdaq] macros parses FEMacros as colon-separated with no tooltip; the newer otsdaq-mu2e client parses semicolons with a tooltip"
+    issue: pending
+    fingerprint: be09e8ab
+  - id: CLT-007
+    severity: S3
+    type: enhancement
+    title: "[otsdaq] raw can drive state transitions, FE macros and configuration writes with no opt-in beyond a warning"
+    issue: pending
+    fingerprint: cd22d521
+  - id: CLT-008
+    severity: S3
+    type: documentation
+    title: "[docs] otsdaq examples disagree with the shifter tunnel on scheme, ports and forwarded services"
+    issue: pending
+    fingerprint: 844401e7
+  - id: CLT-009
+    severity: S3
+    type: enhancement
+    title: "[ci] 51 pytest cases and 5 CppUnit checks with no CI workflow"
+    issue: pending
+    fingerprint: 52049285
+  - id: CLT-010
+    severity: S4
+    type: bug
+    title: "[auth] CookieCode hygiene: read on every command, kept in InstanceConfig repr, owner unchecked, HOWTO puts it in shell history"
+    issue: pending
+    fingerprint: d3ed4e60
+  - id: CLT-011
+    severity: S4
+    type: bug
+    title: "[config] a mistyped -c path is silently ignored and a YAML syntax error ends in a traceback"
+    issue: pending
+    fingerprint: 852edb40
+  - id: CLT-012
+    severity: S4
+    type: documentation
+    title: "[config] five global options are parsed, documented and shown but have no effect"
+    issue: pending
+    fingerprint: c65897ce
+  - id: CLT-013
+    severity: S4
+    type: enhancement
+    title: "[config] no .env layer in the precedence chain"
+    issue: pending
+    fingerprint: 3596cd96
+  - id: CLT-014
+    severity: S4
+    type: bug
+    title: "[install] cmake --install writes the reference config to a path neither search list reads"
+    issue: pending
+    fingerprint: 9ade35a4
